@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const headers = { headers: {authToken, conentTypeJsonHeader }};
 const conentTypeJsonHeader = {'Content-Type': 'application/json'};
-const authToken = {'Authorization': 'Bearer ' + /token/};
-
+const authToken = {'Authorization': 'Bearer ' + token};
+let token = null;
 const API_ROOT = process.env.REACT_APP_API_URL;
 //Authorization : Bearer cn389ncoiwuencr
 const requests = {
@@ -19,13 +19,13 @@ const requests = {
 
   const Auth = {
     current: () =>
-      requests.get('user'),
+      requests.get('auth'),
     login: (email, password) =>
-      requests.post('users/login', { user: { email, password } }),
+      requests.post('auth/login', JSON.stringify({ email, password }), {headers: conentTypeJsonHeader}),
     register: (userDetails) =>
       requests.put('auth/signup', JSON.stringify(userDetails),  {headers: conentTypeJsonHeader}),
     save: user =>
-      requests.put('user', { user })
+      requests.put('auth', { user })
   };
 
   export default {
@@ -34,6 +34,6 @@ const requests = {
     //Comments,
     //Profile,
     //Tags,
-    //setToken: _token => { token = _token; }
+    setToken: _token => { token = _token; }
   };
   

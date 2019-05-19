@@ -1,34 +1,100 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Signup from './auth/register';
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import Register from './auth/Register';
+import Login from './auth/Login';
+import { connect } from 'react-redux';
+import { LOGOUT, REDIRECT } from '../constants/actionTypes';
 
-export default class Nav extends Component {
+const mapStateToProps = state => ({
+    //appLoaded: state.common.appLoaded,
+    //appName: state.common.appName,
+    currentUser: state.common.currentUser,
+    redirectTo: state.common.redirectTo
+  });
+  
+  const mapDispatchToProps = dispatch => ({
+    //onLoad: (payload, token) =>
+      //dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
+    onRedirect: () =>
+      dispatch({ type: REDIRECT }),
+    onLogout: () =>
+      dispatch({ type: LOGOUT })
+  });
+
+class Nav extends Component {
     render() {
+        console.log(this.props.redirectTo);
+        const loggedIn = Boolean(this.props.currentUser);
+        const redirect = this.props.redirectTo;
+        const onLogoutCb = this.props.onLogout;
+        if(redirect){
+            this.props.onRedirect();
+            return <Router><Redirect to={redirect} /></Router>;
+        }
+
         return (
             <Router>
-
+               
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <a className="navbar-brand" href="#">MO11</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav">
-                        <li className="nav-item active">
-                            <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Вход</a>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/signup">Регистрация</Link>
-                        </li>
-                        </ul>
+                        <LoggedInMenu loggedIn={loggedIn} logoutCb={onLogoutCb} />
+                        <LoggedOutMenu loggedIn={loggedIn} />
                     </div>
                 </nav>
             
-                <Route path="/signup" component={Signup} />
+                <Route path="/register" component={Register} />
+                <Route path="/login" component={Login} />
             </Router>
         );
     }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+
+function LoggedOutMenu(props){
+    if(!props.loggedIn){
+        return (
+            <ul className="navbar-nav">
+                <li className="nav-item active">
+                    <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/login">Вход</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/register">Регистрация</Link>
+                </li>
+            </ul>
+        );
+    }
+    return null;
+}
+
+function LoggedInMenu(props){
+    if(props.loggedIn){
+        return (
+            <ul className="navbar-nav">
+                <li className="nav-item active">
+                    <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/login">Поръчки</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/login">Продукти</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/login">Клиенти</Link>
+                </li>
+                <li className="nav-item">
+                    <a className="nav-link" href="#" onClick={props.logoutCb()}>Изход</a>
+                </li>
+            </ul>
+        );
+    }
+    return null;
 }

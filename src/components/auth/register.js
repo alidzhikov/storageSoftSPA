@@ -37,7 +37,7 @@ class Register extends Component {
             passwordConfirm: '852147', 
             isSubmitting: false,
             redirectToReferrer: false
-        }
+        };
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.submitForm = (user) => ev => {

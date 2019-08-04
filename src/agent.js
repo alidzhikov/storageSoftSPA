@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-const headers = { headers: {authToken, conentTypeJsonHeader }};
-const conentTypeJsonHeader = {'Content-Type': 'application/json'};
-const authToken = {'Authorization': 'Bearer ' + token};
-let token = null;
 const API_ROOT = process.env.REACT_APP_API_URL;
+const conentTypeJsonHeader = {'Content-Type': 'application/json'};
+let authToken = null;
+const headers = () => { return {headers: {...conentTypeJsonHeader, ...authToken}} };
 //Authorization : Bearer cn389ncoiwuencr
+
 const requests = {
     del: (url, headers) =>
-      axios.del(`${API_ROOT}${url}`, headers),//.then(responseBody),
+      axios.delete(`${API_ROOT}${url}`, headers),//.then(responseBody),
     get: (url, headers) =>
       axios.get(`${API_ROOT}${url}`, headers),//.then(responseBody),
     put: (url, body, headers) =>
@@ -28,12 +28,25 @@ const requests = {
       requests.put('auth', { user })
   };
 
+  const Product = {
+    getAll: () => 
+      requests.get('products'),
+    getId: (id) =>
+      requests.get('products/' + id),
+    update: product =>
+      requests.put('products/' + product._id, JSON.stringify(product), {headers: {...conentTypeJsonHeader, ...authToken}}),
+    create: product =>
+      requests.post('products', JSON.stringify(product), {headers: {...conentTypeJsonHeader, ...authToken}}),
+    delete: id => 
+      requests.del('products/' + id, headers()),
+  };
+
   export default {
-    //Articles,
+    Product,
     Auth,
     //Comments,
     //Profile,
     //Tags,
-    setToken: _token => { token = _token; }
+    setToken: _token => { authToken =  {'Authorization': 'Bearer ' + _token} }
   };
   

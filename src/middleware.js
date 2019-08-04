@@ -3,8 +3,7 @@ import {
   ASYNC_START,
   ASYNC_END,
   LOGIN,
-  LOGOUT,
-  REGISTER
+  LOGOUT
 } from './constants/actionTypes';
 
 const promiseMiddleware = store => next => action => {
@@ -32,7 +31,7 @@ const promiseMiddleware = store => next => action => {
         }
         console.log('ERROR', error);
         action.error = true;
-        action.payload = error.response.body;
+        action.payload = error;
         if (!action.skipTracking) {
           store.dispatch({ type: ASYNC_END, promise: action.payload });
         }
@@ -49,11 +48,12 @@ const promiseMiddleware = store => next => action => {
 const localStorageMiddleware = store => next => action => {
   if (/*action.type === REGISTER ||*/ action.type === LOGIN) {
     if (!action.error) {
-      window.localStorage.setItem('jwt', action.payload.token);
+      window.localStorage.setItem('user', JSON.stringify(action.payload));
+      console.log(action.payload);
       agent.setToken(action.payload.token);
     }
   } else if (action.type === LOGOUT) {
-    window.localStorage.setItem('jwt', '');
+    window.localStorage.setItem('user', '');
     agent.setToken(null);
   }
 

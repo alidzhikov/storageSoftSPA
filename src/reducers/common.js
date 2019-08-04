@@ -13,7 +13,9 @@ import {
     PROFILE_PAGE_UNLOADED,
     SETTINGS_PAGE_UNLOADED,
     LOGIN_PAGE_UNLOADED,
-    REGISTER_PAGE_UNLOADED
+    REGISTER_PAGE_UNLOADED,
+    PRODUCT_ADD,
+    PRODUCT_EDIT,
   } from '../constants/actionTypes';
   
   const defaultState = {
@@ -29,7 +31,7 @@ import {
           ...state,
           token: action.token || null,
           appLoaded: true,
-          currentUser: action.payload ? action.payload.user : null
+          currentUser: action.payload ? action.payload : null
         };
       case REDIRECT:
         return { ...state, redirectTo: null };
@@ -49,7 +51,7 @@ import {
           ...state,
           redirectTo: action.error ? null : '/',
           token: action.error ? null : action.payload.token,
-          currentUser: action.error ? null : action.payload.userId
+          currentUser: action.error ? null : action.payload.currentUser
         };
       case REGISTER:
         return {
@@ -68,6 +70,10 @@ import {
       case LOGIN_PAGE_UNLOADED:
       case REGISTER_PAGE_UNLOADED:
         return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
+      case PRODUCT_ADD:
+        return { ...state, redirectTo: action.error ? null : '/products'}
+      case PRODUCT_EDIT:
+        return { ...state, redirectTo: action.error ? null : '/products'}
       default:
         return state;
     }

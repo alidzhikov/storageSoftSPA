@@ -71,7 +71,6 @@ import {
       case REGISTER_PAGE_UNLOADED:
         return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
       case PRODUCT_ADD:
-        return { ...state, redirectTo: action.error ? null : '/products'}
       case PRODUCT_EDIT:
         return { ...state, redirectTo: action.error ? null : '/products'}
       default:

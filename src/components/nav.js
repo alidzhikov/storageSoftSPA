@@ -4,6 +4,8 @@ import Register from './auth/Register';
 import Login from './auth/Login';
 import ProductInput from './product/ProductInput';
 import ProductComponent from './product/index';
+import CustomerComponent from './customer/index';
+import CustomerInput from './customer/CustomerInput';
 import { connect } from 'react-redux';
 import { LOGOUT, REDIRECT, APP_LOAD } from '../constants/actionTypes';
 import agent from '../agent';
@@ -41,15 +43,13 @@ class Nav extends Component {
         const onLogoutCb = this.props.onLogout.bind(this);
         const user = this.props.currentUser;
         const appLoaded = this.props.appLoaded;
-        console.log('---');
-        console.log(redirect);
         if(redirect){
             this.props.onRedirect();
             return <Router><Redirect to={redirect} /></Router>;
         }
         if(!appLoaded){
             return (
-                <img src="https://media.giphy.com/media/3og0IV5cAmtbkeKPBe/giphy.gif" />
+                <img src="https://media.giphy.com/media/3og0IV5cAmtbkeKPBe/giphy.gif"/>
             )
         }
 
@@ -57,7 +57,7 @@ class Nav extends Component {
             <Router>
                
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <a className="navbar-brand">MO11</a>
+                    <Link className="navbar-brand" to="/">MO11</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -72,6 +72,9 @@ class Nav extends Component {
                 <Route path="/editProduct/:productID" component={ProductInput} />
                 <Route path="/login" component={Login} />
                 <Route path="/products" component={ProductComponent} />
+                <Route path="/customers" component={CustomerComponent} />
+                <Route path="/addCustomer" component={CustomerInput} />
+                <Route path="/editCustomer/:customerID" component={CustomerInput} />
             </Router>
         );
     }
@@ -84,7 +87,7 @@ function LoggedOutMenu(props){
         return (
             <ul className="navbar-nav">
                 <li className="nav-item active">
-                    <a className="nav-link">Home <span className="sr-only">(current)</span></a>
+                    <Link className="nav-link">Home <span className="sr-only">(current)</span></Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/login">Вход</Link>
@@ -104,7 +107,7 @@ function LoggedInMenu(props){
         return (
             <ul className="navbar-nav">
                 <li className="nav-item active">
-                    <a className="nav-link">Home <span className="sr-only">(current)</span></a>
+                    <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/login">Поръчки</Link>
@@ -113,13 +116,13 @@ function LoggedInMenu(props){
                     <Link className="nav-link" to="/products">Продукти</Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="/login">Клиенти</Link>
+                    <Link className="nav-link" to="/customers">Клиенти</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" onClick={props.logoutCb}>Изход</a>
+                    <Link to="/" className="nav-link" onClick={props.logoutCb}>Изход</Link>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link">{fName}</a>
+                    <Link to="/" className="nav-link">{fName}</Link>
                 </li>
             </ul>
         );

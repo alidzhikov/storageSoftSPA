@@ -2,7 +2,6 @@ import {
     APP_LOAD,
     REDIRECT,
     LOGOUT,
-    ORDER_SUBMITTED,
     SETTINGS_SAVED,
     LOGIN,
     REGISTER,
@@ -16,6 +15,10 @@ import {
     REGISTER_PAGE_UNLOADED,
     PRODUCT_ADD,
     PRODUCT_EDIT,
+    CUSTOMER_ADD,
+    CUSTOMER_EDIT,
+    ORDER_ADD,
+    ORDER_EDIT
   } from '../constants/actionTypes';
   
   const defaultState = {
@@ -36,10 +39,7 @@ import {
       case REDIRECT:
         return { ...state, redirectTo: null };
       case LOGOUT:
-        return { ...state, redirectTo: '/', token: null, currentUser: null };
-      case ORDER_SUBMITTED:
-        const redirectUrl = `order/${action.payload.order.slug}`;
-        return { ...state, redirectTo: redirectUrl };
+        return { ...state, redirectTo: '/', token: null, currentUser: null }
       case SETTINGS_SAVED:
         return {
           ...state,
@@ -60,19 +60,23 @@ import {
           //token: action.error ? null : action.payload.user.token,
           //currentUser: action.error ? null : action.payload.user
         };
-      case DELETE_ORDER:
-        return { ...state, redirectTo: '/' };
-      case ORDER_PAGE_UNLOADED:
-      case EDITOR_PAGE_UNLOADED:
-      case HOME_PAGE_UNLOADED:
-      case PROFILE_PAGE_UNLOADED:
-      case SETTINGS_PAGE_UNLOADED:
-      case LOGIN_PAGE_UNLOADED:
-      case REGISTER_PAGE_UNLOADED:
-        return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
+      // case ORDER_PAGE_UNLOADED:
+      // case EDITOR_PAGE_UNLOADED:
+      // case HOME_PAGE_UNLOADED:
+      // case PROFILE_PAGE_UNLOADED:
+      // case SETTINGS_PAGE_UNLOADED:
+      // case LOGIN_PAGE_UNLOADED:
+      // case REGISTER_PAGE_UNLOADED:
+       // return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
       case PRODUCT_ADD:
       case PRODUCT_EDIT:
         return { ...state, redirectTo: action.error ? null : '/products'}
+      case CUSTOMER_ADD:
+      case CUSTOMER_EDIT:
+        return { ...state, redirectTo: action.error ? null : '/customers'}
+      case ORDER_ADD:
+      case ORDER_EDIT:
+        return { ...state, redirectTo: action.error ? null : '/orders'}
       default:
         return state;
     }

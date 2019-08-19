@@ -1,6 +1,6 @@
 import React from 'react';
 import Customer from '../../models/customer';
-import CommonInput from '../common/CommonInput';
+import Input from '../common/Input';
 
 export default function CustomerInput(props){
     const customerID = props.match.params['customerID'];
@@ -22,7 +22,7 @@ export default function CustomerInput(props){
         }
     ];
     return (
-        <CommonInput 
+        <Input 
             type={type} 
             element={customer} 
             formFields={formFields} 

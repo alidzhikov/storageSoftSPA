@@ -13,8 +13,8 @@ export default (state = {}, action) => {
           ...state,
           products: action.payload.products,
         };
-      case PRODUCT_PAGE_UNLOADED:
-        return {};
+      // case PRODUCT_PAGE_UNLOADED:
+      //   return {};
       case PRODUCT_ADD:
         state.products = state.products ? state.products : [];
         return {

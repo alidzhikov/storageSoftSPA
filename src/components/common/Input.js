@@ -4,6 +4,7 @@ import * as actionTypes from '../../constants/actionTypes';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { connect } from 'react-redux';
 import agent from '../../agent';
+import CustomerFormField from '../order/form-fields/customer';
 
 const mapStateToProps = state => ({
     customer: state.customer,
@@ -27,7 +28,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: actionTypes[type.toUpperCase() + '_ADD'], payload });
     }
   });
-class CommonInput extends React.Component {
+class Input extends React.Component {
     constructor(props) {
         super();
         this.state = {
@@ -39,6 +40,7 @@ class CommonInput extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.isEditOrAdd = this.isEditOrAdd.bind(this); 
+        this.assembleFormFields = this.assembleFormFields.bind(this);
     }
 
     componentWillMount(){
@@ -81,12 +83,14 @@ class CommonInput extends React.Component {
         });
     }
 
-    render() {
-        const isSubmitting = this.state.isSubmitting;
-        const element = this.state.element;
-        const label = this.props.label;
-        const formFields = this.props.formFields.map((field,index) => {
-            const value = Util.getValueFromKey(element, field.name);
+    assembleFormFields(formFields){
+        return formFields.map((field,index) => {
+            const value = Util.getValueFromKey(this.state.element, field.name);
+            if(field.name === 'customerID'){
+                return <CustomerFormField value={value} options={this.props.customer.customers} name={field.label} placeholder={field.placeholder} key={index}/>
+            }else if(field.name === 'products'){
+                //return <CustomerFormField value={value} name={field.label} placeholder={field.placeholder} />
+            }
             return (
                 <div className="form-group" key={index}>
                 <label htmlFor={field.name}>{field.label}</label>
@@ -95,6 +99,12 @@ class CommonInput extends React.Component {
                 </div>
             );
         });
+    }
+
+    render() {
+        const isSubmitting = this.state.isSubmitting;
+        const label = this.props.label;
+        const formFields = this.assembleFormFields(this.props.formFields);
         return (
             <div>
                 <h3>{label}</h3>
@@ -113,4 +123,4 @@ class CommonInput extends React.Component {
     }
 }  
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommonInput);
+export default connect(mapStateToProps, mapDispatchToProps)(Input);

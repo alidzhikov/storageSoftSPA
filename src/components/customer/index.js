@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomerList from './CustomerList';
+import List from '../common/List';
 import { connect } from 'react-redux';
 import { CUSTOMER_PAGE_LOADED, CUSTOMER_PAGE_UNLOADED } from '../../constants/actionTypes';
 import agent from '../../agent';
@@ -27,10 +27,9 @@ class Customer extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div>
-        <CustomerList customers={this.props.customers} />
+        <List elements={this.props.customers} type="customer" />
       </div>
     );
   }

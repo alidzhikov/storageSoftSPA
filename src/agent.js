@@ -47,19 +47,31 @@ const requests = {
     getId: (id) =>
       requests.get('customers/' + id),
     update: customer =>
-      requests.put('customers/' + customer._id, JSON.stringify(customer), {headers: {...conentTypeJsonHeader, ...authToken}}),
+      requests.put('customers/' + customer._id, JSON.stringify(customer), headers()),
     create: customer =>
-      requests.post('customers', JSON.stringify(customer), {headers: {...conentTypeJsonHeader, ...authToken}}),
+      requests.post('customers', JSON.stringify(customer), headers()),
     delete: id => 
       requests.del('customers/' + id, headers()),
+  };
+
+  const Order = {
+    getAll: () => 
+      requests.get('orders'),
+    getId: (id) =>
+      requests.get('orders/' + id),
+    update: order =>
+      requests.put('orders/' + order._id, JSON.stringify(order), headers()),
+    create: order =>
+      requests.post('orders', JSON.stringify(order), headers()),
+    delete: id => 
+      requests.del('orders/' + id, headers()),
   };
 
   export default {
     Product,
     Auth,
     Customer,
-    //Profile,
-    //Tags,
+    Order,
     setToken: _token => { authToken =  {'Authorization': 'Bearer ' + _token} }
   };
   

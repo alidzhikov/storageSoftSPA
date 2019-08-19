@@ -6,6 +6,8 @@ import ProductInput from './product/ProductInput';
 import ProductComponent from './product/index';
 import CustomerComponent from './customer/index';
 import CustomerInput from './customer/CustomerInput';
+import OrderComponent from './order/index';
+import OrderInput from './order/OrderInput';
 import { connect } from 'react-redux';
 import { LOGOUT, REDIRECT, APP_LOAD } from '../constants/actionTypes';
 import agent from '../agent';
@@ -55,7 +57,6 @@ class Nav extends Component {
 
         return (
             <Router>
-               
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <Link className="navbar-brand" to="/">MO11</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +76,9 @@ class Nav extends Component {
                 <Route path="/customers" component={CustomerComponent} />
                 <Route path="/addCustomer" component={CustomerInput} />
                 <Route path="/editCustomer/:customerID" component={CustomerInput} />
+                <Route path="/orders" component={OrderComponent} />
+                <Route path="/addOrder" component={OrderInput} />
+                <Route path="/editOrder/:orderID" component={OrderInput} />
             </Router>
         );
     }
@@ -110,7 +114,7 @@ function LoggedInMenu(props){
                     <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="/login">Поръчки</Link>
+                    <Link className="nav-link" to="/orders">Поръчки</Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/products">Продукти</Link>

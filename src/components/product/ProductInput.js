@@ -1,6 +1,6 @@
 import React from 'react';
 import Product from '../../models/product';
-import CommonInput from '../common/CommonInput';
+import Input from '../common/Input';
 
 export default function ProductInput(props){
     const productID = props.match.params['productID'];
@@ -20,7 +20,7 @@ export default function ProductInput(props){
         }
     ];
     return (
-        <CommonInput 
+        <Input 
             type={type} 
             element={product} 
             formFields={formFields} 

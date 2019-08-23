@@ -1,7 +1,7 @@
 import React from 'react';
 import List from '../common/List';
 import { connect } from 'react-redux';
-import {ORDER_PAGE_LOADED, ORDER_PAGE_UNLOADED} from '../../constants/actionTypes';
+import {ORDER_PAGE_LOADED, ORDER_PAGE_UNLOADED, CUSTOMER_PAGE_LOADED} from '../../constants/actionTypes';
 import agent from '../../agent';
 const mapStateToProps = state => ({
   ...state.order,
@@ -12,6 +12,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: (payload) =>
     dispatch({ type: ORDER_PAGE_LOADED, payload }),
+  onLoadCustomers: payload => 
+    dispatch({ type: CUSTOMER_PAGE_LOADED, payload }),
   onUnload: () =>
     dispatch({ type: ORDER_PAGE_UNLOADED })
 });

@@ -2,7 +2,6 @@ import React from 'react';
 import List from '../common/List';
 import { connect } from 'react-redux';
 import {PRODUCT_PAGE_LOADED, PRODUCT_PAGE_UNLOADED} from '../../constants/actionTypes';
-import agent from '../../agent';
 const mapStateToProps = state => ({
   ...state.product,
   appName: state.common.appName,
@@ -19,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
 class Product extends React.Component {
 
   componentWillMount() {
-    this.props.onLoad(agent.Product.getAll());
+    //this.props.onLoad(agent.Product.getAll());
   }
   
   componentWillUnmount() {

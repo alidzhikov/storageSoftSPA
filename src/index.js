@@ -6,14 +6,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import store from './store';
 import { Provider } from 'react-redux';
 //import App from './components/App';
-import Nav from './components/nav';
+import Body from './components/body';
 
 ReactDOM.render((
   <Provider store={store}>
     <div className="App">
-        <header className="App-header">
-            <Nav/>
-        </header>
+        <Body/>
     </div>
   </Provider>
 ), document.getElementById('root'));

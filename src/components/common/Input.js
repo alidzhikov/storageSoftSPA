@@ -5,6 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { connect } from 'react-redux';
 import agent from '../../agent';
 import CustomerFormField from '../order/form-fields/customer';
+import ProductFormField from '../order/form-fields/product';
 
 const mapStateToProps = state => ({
     customer: state.customer,
@@ -30,24 +31,28 @@ const mapDispatchToProps = dispatch => ({
   });
 class Input extends React.Component {
     constructor(props) {
-        super();
+        super(props);
         this.state = {
-          element: props.element,
-          type: props.type,
-          isSubmitting: false,
-          isEdit: props.isEdit,
+            elementOriginal: props.element,
+            element: props.element,
+            type: props.type,
+            isSubmitting: false,
+            isEdit: props.isEdit,
+            onSubmitNoDb: props.onSubmitNoDb,
+            onCancelParent: props.onCancel
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.isEditOrAdd = this.isEditOrAdd.bind(this); 
         this.assembleFormFields = this.assembleFormFields.bind(this);
+        this.onCancel = this.onCancel.bind(this);
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.isEditOrAdd()
     }
 
-    isEditOrAdd(){
+    isEditOrAdd() {
         const id = this.props.paramID;
         if(!id) return;
         this.setState(state => {
@@ -60,36 +65,58 @@ class Input extends React.Component {
     }
 
     onSubmit() {
-        this.setState(state => {
-            state.element.creator = 
-                state.isEdit ? 
-                    state.element.creator :
-                    this.props.user._id;
-            state.isSubmitting = true;
-        });
-        if(this.state.isEdit){
-            this.props.onEdit({ ...this.state.element}, this.state.type);
+        if(this.state.onSubmitNoDb){
+            this.state.onSubmitNoDb(this.state.element);
         }else{
-            this.props.onSubmit({ ...this.state.element}, this.state.type);
+            this.setState(state => {
+                state.element.creator = 
+                state.isEdit ? 
+                state.element.creator :
+                this.props.user._id;
+                state.isSubmitting = true;
+            });
+            console.log(this.state.element);
+            if(this.state.isEdit){
+                this.props.onEdit({ ...this.state.element}, this.state.type);
+            }else{
+                this.props.onSubmit({ ...this.state.element}, this.state.type);
+            }
         }
+    }
+
+    onCancel(){
+        this.state.onCancelParent(this.state.elementOriginal);
     }
 
     handleChange(event) {
         const key = event.target.name;
         const value = event.target.value;
+        debugger;
         this.setState(state => {
             Util.setValueFromKey(state.element, key, value);
             return state;
         });
     }
 
-    assembleFormFields(formFields){
+    assembleFormFields(formFields) {
         return formFields.map((field,index) => {
             const value = Util.getValueFromKey(this.state.element, field.name);
             if(field.name === 'customerID'){
-                return <CustomerFormField value={value} options={this.props.customer.customers} name={field.label} placeholder={field.placeholder} key={index}/>
+                return <CustomerFormField 
+                    value={value} 
+                    options={this.props.customer.customers} 
+                    name={field.label} 
+                    placeholder={field.placeholder} 
+                    onChange={field.onChange} 
+                    key={index}/>
             }else if(field.name === 'products'){
-                //return <CustomerFormField value={value} name={field.label} placeholder={field.placeholder} />
+                return <ProductFormField 
+                    value={value} 
+                    options={this.props.product.products} 
+                    name={field.label} 
+                    placeholder={field.placeholder} 
+                    onChange={field.onChange} 
+                    key={index}/>
             }
             return (
                 <div className="form-group" key={index}>
@@ -103,8 +130,30 @@ class Input extends React.Component {
 
     render() {
         const isSubmitting = this.state.isSubmitting;
-        const label = this.props.label;
         const formFields = this.assembleFormFields(this.props.formFields);
+        if(this.state.onSubmitNoDb){
+            const label = this.state.element.product.name;
+            // const onCancel = this.onCancel;
+            return (
+                <tr>
+                    <td>
+                    <h3>{label}</h3>
+                        <Formik
+                            onSubmit={this.onSubmit}
+                            render={({ errors, status, touched }) => (
+                                <Form>
+                                    {formFields}    
+                                    {status && status.msg && <div>{status.msg}</div>}
+                                    <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Запазване</button>
+                                    {/* <button onClick={onCancel} className="btn btn-danger" disabled={isSubmitting}>Отказ</button> */}
+                                </Form>
+                            )}
+                        />
+                    </td>
+                </tr>
+            );
+        }
+        const label = this.props.label;
         return (
             <div>
                 <h3>{label}</h3>

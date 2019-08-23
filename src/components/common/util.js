@@ -12,6 +12,7 @@ export function getValueFromKey(element, fieldName){
 export function setValueFromKey(element, fieldName, value){
     const split = fieldName.split('.');
     const fieldKey = split.shift();
+   // if(!element.hasOwnProperty(fieldName)) element[fieldName] = 
     Object.keys(element).forEach(function(key) {
         if(key !== fieldKey) return;
         if(split.length > 0){

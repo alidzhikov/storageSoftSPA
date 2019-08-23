@@ -9,7 +9,7 @@ import CustomerInput from './customer/CustomerInput';
 import OrderComponent from './order/index';
 import OrderInput from './order/OrderInput';
 import { connect } from 'react-redux';
-import { LOGOUT, REDIRECT, APP_LOAD } from '../constants/actionTypes';
+import { LOGOUT, REDIRECT, APP_LOAD, CUSTOMER_PAGE_LOADED, PRODUCT_PAGE_LOADED } from '../constants/actionTypes';
 import agent from '../agent';
 
 const mapStateToProps = state => ({
@@ -25,10 +25,14 @@ const mapStateToProps = state => ({
     onRedirect: () =>
       dispatch({ type: REDIRECT }),
     onLogout: () =>
-      dispatch({ type: LOGOUT })
+      dispatch({ type: LOGOUT }),
+    onLoadCustomers: payload => 
+      dispatch({ type: CUSTOMER_PAGE_LOADED, payload }),
+    onLoadProducts: (payload) =>
+      dispatch({ type: PRODUCT_PAGE_LOADED, payload }),
   });
 
-class Nav extends Component {
+class Body extends Component {
     
     componentWillMount() {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -36,7 +40,9 @@ class Nav extends Component {
         let props = this.props;
         setTimeout(function(){
             props.onLoad(user.currentUser, user.token);
-        },500)
+        },500);
+        this.props.onLoadCustomers(agent.Customer.getAll());
+        this.props.onLoadProducts(agent.Product.getAll());
     }
     
     render() {
@@ -51,22 +57,24 @@ class Nav extends Component {
         }
         if(!appLoaded){
             return (
-                <img src="https://media.giphy.com/media/3og0IV5cAmtbkeKPBe/giphy.gif"/>
+                <img alt="" src="https://media.giphy.com/media/3og0IV5cAmtbkeKPBe/giphy.gif"/>
             )
         }
 
         return (
             <Router>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <Link className="navbar-brand" to="/">MO11</Link>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <LoggedInMenu loggedIn={loggedIn} logoutCb={onLogoutCb} user={user}/>
-                        <LoggedOutMenu loggedIn={loggedIn} />
-                    </div>
-                </nav>
+                <header className="App-header">     
+                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                        <Link className="navbar-brand" to="/">MO11</Link>
+                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <LoggedInMenu loggedIn={loggedIn} logoutCb={onLogoutCb} user={user}/>
+                            <LoggedOutMenu loggedIn={loggedIn} />
+                        </div>
+                    </nav>
+                </header>
             
                 <Route path="/register" component={Register} />
                 <Route path="/addProduct" component={ProductInput} />
@@ -84,7 +92,7 @@ class Nav extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+export default connect(mapStateToProps, mapDispatchToProps)(Body);
 
 function LoggedOutMenu(props){
     if(!props.loggedIn){

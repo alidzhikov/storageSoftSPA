@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ProductCtr from './models/product';
 
 const API_ROOT = process.env.REACT_APP_API_URL;
 const conentTypeJsonHeader = {'Content-Type': 'application/json'};
@@ -30,7 +31,12 @@ const requests = {
 
   const Product = {
     getAll: () => 
-      requests.get('products'),
+      requests.get('products').then(res => {
+        if(res && res.data){
+          res.data.products = res.data.products.map(el => new ProductCtr(el));
+        }
+        return res;
+      }),
     getId: (id) =>
       requests.get('products/' + id),
     update: product =>

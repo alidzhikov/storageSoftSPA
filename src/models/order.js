@@ -1,18 +1,18 @@
 export default class Order{
-    products;
+    orderProducts;
     customerID;
     creator;
     createdAt;
     lastModified;
 
     constructor(
-        products = [],
+        orderProducts = [],
         customerID = null,
         creator = null,
         createdAt = new Date(),
         lastModified = null
     ){
-        this.products = products;
+        this.orderProducts = orderProducts;
         this.customerID = customerID;
         this.creator = creator;
         this.createdAt = createdAt;

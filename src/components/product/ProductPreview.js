@@ -21,7 +21,7 @@ const ProductPreview = props => {
 
   return (
     <div className="product-preview" key={product._id}>
-      <p>{product.name} - {product.basePrice.$numberDecimal}</p>
+      <p>{product.name} - {product.size} - {product.basePrice.$numberDecimal}</p>
       <Link to={productEditURL}><button className="btn btn-primary">Редактирай</button></Link>
       <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
     </div>

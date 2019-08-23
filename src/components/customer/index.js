@@ -2,7 +2,6 @@ import React from 'react';
 import List from '../common/List';
 import { connect } from 'react-redux';
 import { CUSTOMER_PAGE_LOADED, CUSTOMER_PAGE_UNLOADED } from '../../constants/actionTypes';
-import agent from '../../agent';
 const mapStateToProps = state => ({
   ...state.customer,
   appName: state.common.appName,
@@ -19,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
 class Customer extends React.Component {
 
   componentWillMount() {
-    this.props.onLoad(agent.Customer.getAll());
+    //this.props.onLoad(agent.Customer.getAll());
   }
   
   componentWillUnmount() {

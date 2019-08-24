@@ -14,7 +14,7 @@ export default function ProductInput(props){
             placeholder: ''
         },
         {
-            name: 'basePrice.$numberDecimal', 
+            name: 'basePrice', 
             label: 'Цена', 
             placeholder: ''
         },

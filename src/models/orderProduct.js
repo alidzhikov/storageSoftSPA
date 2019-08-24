@@ -5,7 +5,7 @@ export default class OrderProduct {
 
     constructor(
         product=null,
-        price = { $numberDecimal: 0 },
+        price = 0,
         qty=0
     ){
         this.product = product;

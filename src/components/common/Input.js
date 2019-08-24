@@ -49,6 +49,7 @@ class Input extends React.Component {
     }
 
     componentWillMount() {
+
         this.isEditOrAdd()
     }
 
@@ -91,7 +92,6 @@ class Input extends React.Component {
     handleChange(event) {
         const key = event.target.name;
         const value = event.target.value;
-        debugger;
         this.setState(state => {
             Util.setValueFromKey(state.element, key, value);
             return state;

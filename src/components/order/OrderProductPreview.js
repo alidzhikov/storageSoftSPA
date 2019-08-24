@@ -56,7 +56,7 @@ export default class OrderProductPreview extends React.Component{
             placeholder: 'Брой продукти',
         },
         {
-            name: 'price.$numberDecimal', 
+            name: 'price', 
             label: 'Цена', 
             placeholder: 'Цена на продукт',
         }
@@ -79,8 +79,8 @@ export default class OrderProductPreview extends React.Component{
           <td>{orderProduct.product.name} </td>
           <td>{orderProduct.product.size} </td>
           <td>{orderProduct.qty} </td>
-          <td>{orderProduct.product.basePrice.$numberDecimal} </td>
-          <td>{orderProduct.product.basePrice.$numberDecimal*orderProduct.qty} </td>
+          <td>{orderProduct.price} </td>
+          <td>{orderProduct.price*orderProduct.qty} </td>
           <td>{buttons}</td>
         </tr>
       );

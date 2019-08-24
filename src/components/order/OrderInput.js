@@ -24,17 +24,17 @@ export default class OrderInput extends React.Component{
                     name: 'products', 
                     label: 'Продукти', 
                     placeholder: 'Добави продукт',
-                    onChange: this.onProductAddorUpdate.bind(this)
+                    onChange: this.onProductAddOrUpdate.bind(this)
                 }
             ],
         }
         this.calculateTotalPrice = this.calculateTotalPrice.bind(this);
         this.onCustomerSelect = this.onCustomerSelect.bind(this);
-        this.onProductAddorUpdate = this.onProductAddorUpdate.bind(this);
+        this.onProductAddorUpdate = this.onProductAddOrUpdate.bind(this);
         this.addProductToOrder = this.addOrUpdateOrderProduct.bind(this);
     }
     
-    onProductAddorUpdate(product, update=false){        
+    onProductAddOrUpdate(product, update=false){        
         const orderProduct = product instanceof OrderProduct ? product : new OrderProduct(product, product.basePrice, 1);
         this.setState(state => {
             this.addOrUpdateOrderProduct(state.order, orderProduct, update);
@@ -54,7 +54,7 @@ export default class OrderInput extends React.Component{
     calculateTotalPrice(){
         if(!this.state.order || !this.state.order.orderProducts) return 0;
         let totalSum = 0;
-        this.state.order.orderProducts.forEach(oPr => totalSum += oPr.qty * oPr.price.$numberDecimal);
+        this.state.order.orderProducts.forEach(oPr => totalSum += oPr.qty * oPr.price);
         return totalSum;
     }
 
@@ -77,7 +77,7 @@ export default class OrderInput extends React.Component{
         const order = this.state.order;
         const type = this.state.type;
         const formFields = this.state.formFields;
-        const onProductAdd = this.onProductAddorUpdate;
+        const onProductAdd = this.onProductAddOrUpdate.bind(this);
         const products = order.orderProducts.map((orderProduct,i) => {
             return <OrderProductPreview orderProduct={orderProduct} onChange={onProductAdd} key={i} />
         });

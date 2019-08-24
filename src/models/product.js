@@ -10,7 +10,7 @@ export default class Product {
 
     constructor({
         name = null,
-        basePrice = { $numberDecimal: 0 },
+        basePrice = 0,
         size = null,
         creator = '',
         createdAt = null,

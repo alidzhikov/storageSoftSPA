@@ -4,6 +4,10 @@ import agent from '../../agent';
 import { connect } from 'react-redux';
 import { ORDER_REMOVE } from '../../constants/actionTypes';
 
+const mapStateToProps = state => ({
+  ...state.customer,
+});
+
 const mapDispatchToProps = dispatch => ({
   onDelete: id => {
     const payload = agent.Order.delete(id);
@@ -12,20 +16,26 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const OrderPreview = props => {
+
   const order = props.order;
   const onDeleteEv = (ev) => { 
     ev.preventDefault(); 
-    props.onDelete(order._id);
+    // eslint-disable-next-line no-restricted-globals
+    if(confirm('Сигурни ли сте че искате да изтриете поръчка?')) {
+      props.onDelete(order._id);
+    }
   };
   const orderEditURL = "/editOrder/" + order._id;
+  const orderViewURL = "/orderView/" + order._id;
+  const customer = props.customers.find(c => c._id === order.customerID);
 
   return (
     <div className="order-preview" key={order._id}>
-      <p>{order.fName} - {order.lName}</p>
+      <p><Link to={orderViewURL}> {customer.fName + ' ' + customer.lName} - {order.createdAt}</Link> </p>
       <Link to={orderEditURL}><button className="btn btn-primary">Редактирай</button></Link>
       <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
     </div>
   );
 }
 
-export default connect(() => ({}), mapDispatchToProps)(OrderPreview);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderPreview);

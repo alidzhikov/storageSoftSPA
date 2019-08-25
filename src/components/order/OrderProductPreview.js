@@ -7,6 +7,7 @@ export default class OrderProductPreview extends React.Component{
     this.state = {
         orderProduct: props.orderProduct,
         isEditingInOrderMode: props.isEditingInOrderMode,
+        notEditable: props.notEditable,
         onChange: props.onChange
     };
     this.onSaveOrderProduct = this.onSaveOrderProduct.bind(this);
@@ -40,8 +41,7 @@ export default class OrderProductPreview extends React.Component{
     const onSwitchEditOrderProduct = this.onSwitchEditOrderProduct;
     const onSaveOrderProduct = this.onSaveOrderProduct;
     const onDeleteOrderProduct = this.onDeleteOrderProduct;
-    
-    const buttons = this.state.isEditingInOrderMode ? null :
+    const buttons = this.state.notEditable || this.state.isEditingInOrderMode ? null :
         ( 
           <span>
             <button className="btn btn-primary" onClick={onSwitchEditOrderProduct}>Редактирай</button>
@@ -71,7 +71,6 @@ export default class OrderProductPreview extends React.Component{
           formFields={formFields} 
           onSubmitNoDb={onSaveOrderProduct}
           onCancel={onCancelEditOrderProduct} />
-    
       );
     }else{
       return (

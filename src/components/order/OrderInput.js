@@ -2,7 +2,7 @@ import React from 'react';
 import Order from '../../models/order';
 import OrderProduct from '../../models/orderProduct';
 import Input from '../common/Input';
-import OrderProductPreview from '../order/OrderProductPreview';
+import OrderView from './OrderView';
 
 export default class OrderInput extends React.Component{
     constructor(props){
@@ -11,7 +11,6 @@ export default class OrderInput extends React.Component{
             orderID: props.match.params['orderID'],
             isEdit: props.match.url.indexOf('editOrder') > -1,
             order:  new Order(),
-            totalSum: 0,
             type: 'order',
             formFields: [
                 {
@@ -28,7 +27,6 @@ export default class OrderInput extends React.Component{
                 }
             ],
         }
-        this.calculateTotalPrice = this.calculateTotalPrice.bind(this);
         this.onCustomerSelect = this.onCustomerSelect.bind(this);
         this.onProductAddorUpdate = this.onProductAddOrUpdate.bind(this);
         this.addProductToOrder = this.addOrUpdateOrderProduct.bind(this);
@@ -38,7 +36,6 @@ export default class OrderInput extends React.Component{
         const orderProduct = product instanceof OrderProduct ? product : new OrderProduct(product, product.basePrice, 1);
         this.setState(state => {
             this.addOrUpdateOrderProduct(state.order, orderProduct, update);
-            state.totalSum = this.calculateTotalPrice();
             return state;
         });
     }
@@ -49,13 +46,6 @@ export default class OrderInput extends React.Component{
             state.order.customerID = customer._id;
             return state;
         });
-    }
-
-    calculateTotalPrice(){
-        if(!this.state.order || !this.state.order.orderProducts) return 0;
-        let totalSum = 0;
-        this.state.order.orderProducts.forEach(oPr => totalSum += oPr.qty * oPr.price);
-        return totalSum;
     }
 
     addOrUpdateOrderProduct(order, orderProduct, update){
@@ -78,11 +68,6 @@ export default class OrderInput extends React.Component{
         const type = this.state.type;
         const formFields = this.state.formFields;
         const onProductAdd = this.onProductAddOrUpdate.bind(this);
-        const products = order.orderProducts.map((orderProduct,i) => {
-            return <OrderProductPreview orderProduct={orderProduct} onChange={onProductAdd} key={i} />
-        });
-        const totalSum = this.state.totalSum;
-        const customerName = this.state.customer ? this.state.customer.fName + ' ' + this.state.customer.lName : null;
         return (
             <div>
                 <Input 
@@ -92,43 +77,7 @@ export default class OrderInput extends React.Component{
                     paramID={orderID} 
                     isEdit={isEdit}
                     label={ (!isEdit ? 'Създай' : 'Редактирай') + ' поръчка'} />
-                
-                <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">Клиент</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{customerName}</td>
-                        </tr>
-                    </tbody>
-                </table> 
-                {/* a new component */}
-                <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">Продукт</th>
-                        <th scope="col">Размер</th>
-                        <th scope="col">Брой</th>
-                        <th scope="col">Цена 1</th>
-                        <th scope="col">Цена</th>
-                        <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products} 
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{totalSum}</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <OrderView order={order} onChange={onProductAdd} />
             </div>
         );
     }

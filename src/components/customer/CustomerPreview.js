@@ -15,7 +15,10 @@ const CustomerPreview = props => {
   const customer = props.customer;
   const onDeleteEv = (ev) => { 
     ev.preventDefault(); 
-    props.onDelete(customer._id);
+    // eslint-disable-next-line no-restricted-globals
+    if(confirm('Сигурни ли сте че искате да изтриете клиент?')) {
+      props.onDelete(customer._id);
+    }
   };
   const customerEditURL = "/editCustomer/" + customer._id;
 

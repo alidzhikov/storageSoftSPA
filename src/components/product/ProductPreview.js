@@ -15,13 +15,16 @@ const ProductPreview = props => {
   const product = props.product;
   const onDeleteEv = (ev) => { 
     ev.preventDefault(); 
-    props.onDelete(product._id);
+    // eslint-disable-next-line no-restricted-globals
+    if(confirm('Сигурни ли сте че искате да изтриете продукт?')) {
+      props.onDelete(product._id);
+    }
   };
   const productEditURL = "/editProduct/" + product._id;
 
   return (
     <div className="product-preview" key={product._id}>
-      <p>{product.name} - {product.size} - {product.basePrice.$numberDecimal}</p>
+      <p>{product.name} - {product.size} - {product.basePrice}</p>
       <Link to={productEditURL}><button className="btn btn-primary">Редактирай</button></Link>
       <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
     </div>

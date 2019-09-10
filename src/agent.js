@@ -1,5 +1,6 @@
 import axios from 'axios';
 import ProductCtr from './models/product';
+import CustomerCtr from './models/customer';
 
 const API_ROOT = process.env.REACT_APP_API_URL;
 const conentTypeJsonHeader = {'Content-Type': 'application/json'};
@@ -49,7 +50,12 @@ const requests = {
 
   const Customer = {
     getAll: () => 
-      requests.get('customers'),
+      requests.get('customers').then(res => {
+        if(res && res.data){
+          res.data.customers = res.data.customers.map(el => new CustomerCtr(el));
+        }
+        return res;
+      }),
     getId: (id) =>
       requests.get('customers/' + id),
     update: customer =>

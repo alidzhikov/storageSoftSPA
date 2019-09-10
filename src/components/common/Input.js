@@ -55,6 +55,7 @@ class Input extends React.Component {
 
     isEditOrAdd() {
         const id = this.props.paramID;
+        
         if(!id) return;
         this.setState(state => {
             state.element = 
@@ -70,10 +71,8 @@ class Input extends React.Component {
             this.state.onSubmitNoDb(this.state.element);
         }else{
             this.setState(state => {
-                state.element.creator = 
-                state.isEdit ? 
-                state.element.creator :
-                this.props.user._id;
+                state.element.creator = state.isEdit ? 
+                state.element.creator : this.props.user._id;
                 state.isSubmitting = true;
             });
             console.log(this.state.element);
@@ -90,6 +89,7 @@ class Input extends React.Component {
     }
 
     handleChange(event) {
+        
         const key = event.target.name;
         const value = event.target.value;
         this.setState(state => {

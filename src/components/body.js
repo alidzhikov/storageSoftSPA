@@ -8,6 +8,7 @@ import CustomerComponent from './customer/index';
 import CustomerInput from './customer/CustomerInput';
 import OrderComponent from './order/index';
 import OrderView from './order/OrderView';
+import OrderViewPDF from './order/OrderViewPDF';
 import OrderInput from './order/OrderInput';
 import { connect } from 'react-redux';
 import { LOGOUT, REDIRECT, APP_LOAD, CUSTOMER_PAGE_LOADED, PRODUCT_PAGE_LOADED } from '../constants/actionTypes';
@@ -87,6 +88,7 @@ class Body extends Component {
                 <Route path="/editCustomer/:customerID" component={CustomerInput} />
                 <Route path="/orders" component={OrderComponent} />
                 <Route path="/orderView/:orderID" component={OrderView} />
+                {/* <Route path="/orderViewPDF/:orderID" render={OrderViewPDF} /> */}
                 <Route path="/addOrder" component={OrderInput} />
                 <Route path="/editOrder/:orderID" component={OrderInput} />
             </Router>

@@ -17,7 +17,6 @@ export default class ProductFormField extends React.Component{
             placeholder: props.placeholder,
         };
         this.onProductAdd = this.onProductAdd.bind(this);
-        console.log(props);
     }
 
     onProductAdd(value, state, props){

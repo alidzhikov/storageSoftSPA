@@ -7,8 +7,9 @@ export default class OrderProductPreview extends React.Component{
     this.state = {
         orderProduct: props.orderProduct,
         isEditingInOrderMode: props.isEditingInOrderMode,
-        notEditable: props.notEditable,
-        onChange: props.onChange
+        editable: props.editable,
+        onChange: props.onChange,
+        onDelete: props.onDelete,
     };
     this.onSaveOrderProduct = this.onSaveOrderProduct.bind(this);
     this.onSwitchEditOrderProduct = this.onSwitchEditOrderProduct.bind(this);
@@ -28,11 +29,12 @@ export default class OrderProductPreview extends React.Component{
   }
 
   onDeleteOrderProduct(){
-
+    if(this.state.onDelete){
+      this.state.onDelete(this.state.orderProduct.product._id);
+    }
   }
 
-  onCancelEditOrderProduct(productOriginal){
-    console.log(productOriginal);
+  onCancelEditOrderProduct(){
     this.setState(state => state.isEditingInOrderMode = false);
   }
 
@@ -41,25 +43,25 @@ export default class OrderProductPreview extends React.Component{
     const onSwitchEditOrderProduct = this.onSwitchEditOrderProduct;
     const onSaveOrderProduct = this.onSaveOrderProduct;
     const onDeleteOrderProduct = this.onDeleteOrderProduct;
-    const buttons = this.state.notEditable || this.state.isEditingInOrderMode ? null :
-        ( 
-          <span>
-            <button className="btn btn-primary" onClick={onSwitchEditOrderProduct}>Редактирай</button>
-            <button className="btn btn-danger" onClick={onDeleteOrderProduct}>Изтрий</button>
-          </span>
-        );
+    const buttons = !this.state.editable || this.state.isEditingInOrderMode ? null :
+      ( 
+        <span>
+          <button className="btn btn-primary" onClick={onSwitchEditOrderProduct}>Редактирай</button>
+          <button className="btn btn-danger" onClick={onDeleteOrderProduct}>Изтрий</button>
+        </span>
+      );
     
     const formFields = [
-        {
-            name: 'qty', 
-            label: 'Брой', 
-            placeholder: 'Брой продукти',
-        },
-        {
-            name: 'price', 
-            label: 'Цена', 
-            placeholder: 'Цена на продукт',
-        }
+      {
+          name: 'qty', 
+          label: 'Брой', 
+          placeholder: 'Брой продукти',
+      },
+      {
+          name: 'price', 
+          label: 'Цена', 
+          placeholder: 'Цена на продукт',
+      }
     ];
 
     if(this.state.isEditingInOrderMode){

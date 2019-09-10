@@ -2,7 +2,7 @@ import React from 'react';
 import Order from '../../models/order';
 import OrderProduct from '../../models/orderProduct';
 import Input from '../common/Input';
-import OrderView from './OrderView';
+import OrderContent from './OrderContent';
 
 export default class OrderInput extends React.Component{
     constructor(props){
@@ -28,7 +28,6 @@ export default class OrderInput extends React.Component{
             ],
         }
         this.onCustomerSelect = this.onCustomerSelect.bind(this);
-        this.onProductAddorUpdate = this.onProductAddOrUpdate.bind(this);
         this.addProductToOrder = this.addOrUpdateOrderProduct.bind(this);
     }
     
@@ -40,9 +39,16 @@ export default class OrderInput extends React.Component{
         });
     }
 
+    onProductDelete(productID){
+        this.setState(state => {
+            state.order.orderProducts = state.order.orderProducts.filter(opr => opr.product._id !== productID);
+            return state;
+        });
+    }
+
     onCustomerSelect(customer){
         this.setState(state => {
-            state.customer = customer;
+            state.order.customer = customer;
             state.order.customerID = customer._id;
             return state;
         });
@@ -68,6 +74,7 @@ export default class OrderInput extends React.Component{
         const type = this.state.type;
         const formFields = this.state.formFields;
         const onProductAdd = this.onProductAddOrUpdate.bind(this);
+        const onProductDelete = this.onProductDelete.bind(this);
         return (
             <div>
                 <Input 
@@ -77,7 +84,7 @@ export default class OrderInput extends React.Component{
                     paramID={orderID} 
                     isEdit={isEdit}
                     label={ (!isEdit ? 'Създай' : 'Редактирай') + ' поръчка'} />
-                <OrderView order={order} onChange={onProductAdd} />
+                <OrderContent order={order} onChange={onProductAdd} onProductDelete={onProductDelete} />
             </div>
         );
     }

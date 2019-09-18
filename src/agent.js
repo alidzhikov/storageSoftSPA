@@ -1,6 +1,7 @@
 import axios from 'axios';
 import ProductCtr from './models/product';
 import CustomerCtr from './models/customer';
+import StockCtr from './models/stock';
 
 const API_ROOT = process.env.REACT_APP_API_URL;
 const conentTypeJsonHeader = {'Content-Type': 'application/json'};
@@ -79,11 +80,30 @@ const requests = {
       requests.del('orders/' + id, headers()),
   };
 
+  const Stock = {
+    getAll: () => 
+      requests.get('stocks').then(res => {
+        if(res && res.data){
+          res.data.stocks = res.data.stocks.map(el => new StockCtr(el));
+        }
+        return res;
+      }),
+    getId: (id) =>
+      requests.get('stocks/' + id),
+    update: stock =>
+      requests.put('stocks/' + stock._id, JSON.stringify(stock), headers()),
+    create: stock =>
+      requests.post('stocks', JSON.stringify(stock), headers()),
+    delete: id => 
+      requests.del('stocks/' + id, headers()),
+  };
+
   export default {
     Product,
     Auth,
     Customer,
     Order,
+    Stock,
     setToken: _token => { authToken =  {'Authorization': 'Bearer ' + _token} }
   };
   

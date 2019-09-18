@@ -109,7 +109,7 @@ class Input extends React.Component {
                     placeholder={field.placeholder} 
                     onChange={field.onChange} 
                     key={index}/>
-            }else if(field.name === 'products'){
+            }else if(field.name === 'products' || field.name === 'product'){
                 return <ProductFormField 
                     value={value} 
                     options={this.props.product.products} 

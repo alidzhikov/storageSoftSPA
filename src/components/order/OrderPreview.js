@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { ORDER_REMOVE } from '../../constants/actionTypes';
+import Util from './util';
 
 const mapStateToProps = state => ({
   ...state.customer,
@@ -28,10 +29,12 @@ const OrderPreview = props => {
   const orderEditURL = "/editOrder/" + order._id;
   const orderViewURL = "/orderView/" + order._id;
   const customer = props.customers.find(c => c._id === order.customerID);
+  const totalSum = Util.getOrderSum(order);
+  const amountSold = Util.getSoldAmount(order);
 
   return (
     <div className="order-preview" key={order._id}>
-      <p><Link to={orderViewURL}> {customer.fName + ' ' + customer.lName} - {order.createdAt}</Link> </p>
+      <p><Link to={orderViewURL}> {customer.fName + ' ' + customer.lName} - {order.createdAt} - {amountSold} бр. - {totalSum} лв. </Link> </p>
       <Link to={orderEditURL}><button className="btn btn-primary">Редактирай</button></Link>
       <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
     </div>

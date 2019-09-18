@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from '../common/Input';
-
+import Util from './util';
 export default class OrderProductPreview extends React.Component{
   constructor(props){
     super(props);
@@ -10,6 +10,7 @@ export default class OrderProductPreview extends React.Component{
         editable: props.editable,
         onChange: props.onChange,
         onDelete: props.onDelete,
+        onUpdate: props.onUpdate
     };
     this.onSaveOrderProduct = this.onSaveOrderProduct.bind(this);
     this.onSwitchEditOrderProduct = this.onSwitchEditOrderProduct.bind(this);
@@ -22,7 +23,10 @@ export default class OrderProductPreview extends React.Component{
   }
 
   onSaveOrderProduct(orderProduct){
-    this.setState(state => state.isEditingInOrderMode = false);
+    this.setState(state => {
+      state.isEditingInOrderMode = false;
+      return state;
+    });
     if(this.state.onChange){
       this.state.onChange(orderProduct, true);
     }
@@ -80,8 +84,8 @@ export default class OrderProductPreview extends React.Component{
           <td>{orderProduct.product.name} </td>
           <td>{orderProduct.product.size} </td>
           <td>{orderProduct.qty} </td>
-          <td>{orderProduct.price} </td>
-          <td>{orderProduct.price*orderProduct.qty} </td>
+          <td>{Util.roundToTwoString(orderProduct.price)} </td>
+          <td>{Util.roundToTwoString(orderProduct.price*orderProduct.qty)} </td>
           <td>{buttons}</td>
         </tr>
       );

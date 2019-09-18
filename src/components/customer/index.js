@@ -26,11 +26,7 @@ class Customer extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <List elements={this.props.customers} type="customer" />
-      </div>
-    );
+    return <List elements={this.props.customers} type="customer" />;
   }
 }
 

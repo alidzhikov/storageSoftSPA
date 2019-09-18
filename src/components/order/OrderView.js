@@ -33,7 +33,7 @@ class OrderView extends React.Component{
            <div>
                <h1>Преглед на поръчка</h1>
                <OrderContent order={order}/>
-               <button className="btn btn-primary" onClick={rdf}>Принтиране2</button>
+               <button className="btn btn-primary" onClick={rdf}>Принтиране</button>
            </div>
         );
     }

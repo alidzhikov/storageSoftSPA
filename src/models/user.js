@@ -12,11 +12,12 @@ export default class User {
         fName = '', 
         lName = '', 
         orgName = '', 
-        mobilePhone = ''){
-            this.email = email;
-            this.fName = fName;
-            this.lName = lName;
-            this.orgName = orgName;
-            this.mobilePhone = mobilePhone;
+        mobilePhone = ''
+    ){
+        this.email = email;
+        this.fName = fName;
+        this.lName = lName;
+        this.orgName = orgName;
+        this.mobilePhone = mobilePhone;
     }
 }

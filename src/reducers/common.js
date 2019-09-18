@@ -10,7 +10,9 @@ import {
     CUSTOMER_ADD,
     CUSTOMER_EDIT,
     ORDER_ADD,
-    ORDER_EDIT
+    ORDER_EDIT,
+    STOCK_ADD,
+    STOCK_EDIT
   } from '../constants/actionTypes';
   
   const defaultState = {
@@ -69,6 +71,9 @@ import {
       case ORDER_ADD:
       case ORDER_EDIT:
         return { ...state, redirectTo: action.error ? null : '/orders'}
+      case STOCK_ADD:
+      case STOCK_EDIT:
+        return { ...state, redirectTo: action.error ? null : '/stockroom'}
       default:
         return state;
     }

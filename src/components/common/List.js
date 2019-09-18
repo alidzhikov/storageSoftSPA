@@ -2,6 +2,7 @@ import React from 'react';
 import OrderPreview from '../order/OrderPreview';
 import CustomerPreview from '../customer/CustomerPreview';
 import ProductPreview from '../product/ProductPreview';
+import StockPreview from '../stockroom/StockPreview';
 import { Link } from "react-router-dom";
 
 const List = props => {
@@ -41,6 +42,8 @@ function AddButton(props){
       return <Link to="/addCustomer"><button className="btn btn-primary">Създай клиент</button></Link>
     case 'order':
         return <Link to="/addOrder"><button className="btn btn-primary">Създай поръчка</button></Link>
+    case 'stockroom':
+        return <Link to="/addStock"><button className="btn btn-primary">Добави елемент</button></Link>
     default:
       return null;
   }
@@ -54,6 +57,8 @@ function Preview(props){
       return <CustomerPreview customer={props.element} key={props.element._id} />
     case 'order':
         return <OrderPreview order={props.element} key={props.element._id} />
+    case 'stockroom':
+        return <StockPreview stock={props.element} key={props.element._id} />
     default:
   }
 }

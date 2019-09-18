@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import Register from './auth/Register';
 import Login from './auth/Login';
-import ProductInput from './product/ProductInput';
 import ProductComponent from './product/index';
+import ProductInput from './product/ProductInput';
 import CustomerComponent from './customer/index';
 import CustomerInput from './customer/CustomerInput';
 import OrderComponent from './order/index';
-import OrderView from './order/OrderView';
-import OrderViewPDF from './order/OrderViewPDF';
 import OrderInput from './order/OrderInput';
+import OrderView from './order/OrderView';
+import StockroomComponent from './stockroom/index';
+import StockInput from './stockroom/StockInput';
 import { connect } from 'react-redux';
 import { LOGOUT, REDIRECT, APP_LOAD, CUSTOMER_PAGE_LOADED, PRODUCT_PAGE_LOADED } from '../constants/actionTypes';
 import agent from '../agent';
@@ -37,12 +38,15 @@ const mapStateToProps = state => ({
 class Body extends Component {
     
     componentWillMount() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        agent.setToken(user ? user.token : null);
-        let props = this.props;
-        setTimeout(function(){
-            props.onLoad(user.currentUser, user.token);
-        },500);
+        let user = localStorage.getItem('user');
+        user = user ? (JSON.parse(user)).token : null;
+        if(user){
+            agent.setToken(user.token);
+            const props = this.props;
+            setTimeout(function(){
+                props.onLoad(user.currentUser, user.token);
+            },500);
+        }
         this.props.onLoadCustomers(agent.Customer.getAll());
         this.props.onLoadProducts(agent.Product.getAll());
     }
@@ -86,11 +90,13 @@ class Body extends Component {
                 <Route path="/customers" component={CustomerComponent} />
                 <Route path="/addCustomer" component={CustomerInput} />
                 <Route path="/editCustomer/:customerID" component={CustomerInput} />
+                <Route path="/stockroom" component={StockroomComponent} />
+                <Route path="/addStock" component={StockInput} />
+                <Route path="/editStock/:stockID" component={StockInput} />
                 <Route path="/orders" component={OrderComponent} />
-                <Route path="/orderView/:orderID" component={OrderView} />
-                {/* <Route path="/orderViewPDF/:orderID" render={OrderViewPDF} /> */}
                 <Route path="/addOrder" component={OrderInput} />
                 <Route path="/editOrder/:orderID" component={OrderInput} />
+                <Route path="/orderView/:orderID" component={OrderView} />
             </Router>
         );
     }
@@ -103,7 +109,7 @@ function LoggedOutMenu(props){
         return (
             <ul className="navbar-nav">
                 <li className="nav-item active">
-                    <Link className="nav-link">Home <span className="sr-only">(current)</span></Link>
+                    <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/login">Вход</Link>
@@ -133,6 +139,9 @@ function LoggedInMenu(props){
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/customers">Клиенти</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/stockroom">Склад</Link>
                 </li>
                 <li className="nav-item">
                     <Link to="/" className="nav-link" onClick={props.logoutCb}>Изход</Link>

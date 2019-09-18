@@ -1,67 +1,71 @@
-// import React from "react";
-// //import { Page, Text, View, Document, StyleSheet, PDFViewer, Font } from '@react-pdf/renderer';
-// import ReactDOM from 'react-dom';
-// Font.register({ family: 'Oswald', src: 'http://fonts.gstatic.com/s/robotocondensed/v14/Zd2E9abXLFGSr9G3YK2MsDR-eWpsHSw83BRsAQElGgc.ttf' });
-// Font.register({ family: 'Oswald2', src: 'http://fonts.gstatic.com/s/rocksalt/v6/Q94aHXFHGip10K5uxi1jOKCWcynf_cDxXwCLxiixG1c.ttf' });
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-// const styles = StyleSheet.create({
-//   document:{
-//     height: '800px',
-//     width: '100%'
-//   },
-//   page: {
-//     flexDirection: "row"
-//   },
-//   section: {
-//     flexGrow: 1
-//   },
-//   td: {
-//     fontFamily: 'Oswald2',
-//     display: 'table-cell',
-//     color: 'red',
-//     width: '30px'
-//   },
-//   tr: {
-//     display: 'table-row'
-//   },
-//   table: {
-//     display: 'table'
-//   }
-// });
-// const products = (order) => {
-//   return (
-//     <View style={styles.table}>
-//       <Text style={styles.td}>Име  Размер  Брой  Цена 1  Цена asdasd</Text>
-//       {order.orderProducts.map((prod,i) => (
-//         // <View style={styles.tr}>
-//         //   <Text style={styles.td}>{prod.product.name}</Text>
-//         //   <Text style={styles.td}>{prod.product.size}</Text>
-//         //   <Text style={styles.td}>{prod.qty}</Text>
-//         //   <Text style={styles.td}>{prod.price}</Text>
-//         //   <Text style={styles.td}>{prod.price*prod.qty}</Text>
-//         // </View>
-//          <Text>{prod.product.name} {prod.product.size} {prod.qty} {prod.price} {prod.price*prod.qty}</Text>
-//         )
-//       )}
-//     </View>
-//   );
-// };
-// const orderPDF = (order) => (
-//   <Document style={styles.document}>
-//     <Page size="A4" style={styles.page}>
-//       {products(order)}
-//     </Page>
-//   </Document>
-// );
+export default function OrderViewPDF(order) {
+  const styles = {
+		header: {
+			fontSize: 18,
+			bold: true,
+			alignment: 'right',
+			margin: [0, 190, 0, 80]
+		},
+		subheader: {
+			fontSize: 14
+		},
+		superMargin: {
+			margin: [20, 0, 40, 0],
+			fontSize: 15
+		}
+	}
 
-// export default function OrderViewPDF(order) {
-//   console.log(order);
-//   const orderDoc = orderPDF(order);
-//   let root = document.getElementById('root');
-//   root.style = "height: 1200px; width: 100%;";
-//   root.style = 
-//   ReactDOM.render(
-//     (<PDFViewer>{orderDoc}</PDFViewer>),
-//     root
-//     );
-// }
+  const products = order.orderProducts.map(oPr => { return [oPr.product.name, oPr.product.size, oPr.qty, oPr.price, oPr.price*oPr.qty]});
+  const docDefinition = {
+    content: [
+      {
+        layout: 'lightHorizontalLines', // optional
+        table: {
+          headerRows: 1,
+          widths: [ '*' ],
+          body: [
+            [ { text: 'МО-11 ЕООД', style: 'header' } ],
+            [ { text: 'Асеновград, ул. Просвета 10, тел: 088777777, ел. поща: mo-11.ltd@outlook.com', bold: true } ],
+          ]
+        }
+      },
+      {
+        text: 'Стокова разписка',
+        style: 'title',
+        alignment: 'center'
+      },
+      {
+        layout: 'lightHorizontalLines', // optional
+        table: {
+          // headers are automatically repeated if the table spans over multiple pages
+          // you can declare how many rows should be treated as headers
+          headerRows: 1,
+          widths: [ '*', '*', 100, '*', 100 ],
+          body: [
+            [ 'Име', 'Размер', 'Брой', 'Цена 1', 'Цена'],
+            ...products,
+            [ { text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4', 'las' ]
+          ]
+        }
+      }
+    ],
+    styles: {
+      header: {
+        fontSize: 15,
+        bold: true,
+        alignment: 'right',
+        //margin: [0, 190, 0, 80],
+      },
+      title: {
+        margin: [0, 50, 0, 20],
+        fontSize: 18,
+        bold: true
+      }
+    }
+  }
+  pdfMake.createPdf(docDefinition).open();
+}

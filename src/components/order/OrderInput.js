@@ -31,7 +31,12 @@ export default class OrderInput extends React.Component{
         this.addProductToOrder = this.addOrUpdateOrderProduct.bind(this);
     }
     
-    onProductAddOrUpdate(product, update=false){        
+    onProductAddOrUpdate(product, update=false){      
+        if(!product){
+            console.log("asdas2222d");
+            this.setState(state => state);
+            return;
+        }  
         const orderProduct = product instanceof OrderProduct ? product : new OrderProduct(product, product.basePrice, 1);
         this.setState(state => {
             this.addOrUpdateOrderProduct(state.order, orderProduct, update);
@@ -74,6 +79,7 @@ export default class OrderInput extends React.Component{
         const type = this.state.type;
         const formFields = this.state.formFields;
         const onProductAdd = this.onProductAddOrUpdate.bind(this);
+        const onProductUpdate = this.onProductAddOrUpdate.bind(this);
         const onProductDelete = this.onProductDelete.bind(this);
         return (
             <div>
@@ -84,7 +90,7 @@ export default class OrderInput extends React.Component{
                     paramID={orderID} 
                     isEdit={isEdit}
                     label={ (!isEdit ? 'Създай' : 'Редактирай') + ' поръчка'} />
-                <OrderContent order={order} onChange={onProductAdd} onProductDelete={onProductDelete} />
+                <OrderContent order={order} onChange={onProductAdd} onProductUpdate={onProductUpdate} onProductDelete={onProductDelete} />
             </div>
         );
     }

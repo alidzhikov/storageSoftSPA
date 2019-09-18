@@ -1,6 +1,6 @@
 import React from 'react';
 import OrderProductPreview from './OrderProductPreview';
-
+import Util from './util';
 class OrderContent extends React.Component{
     constructor(props){
         super(props);
@@ -9,14 +9,8 @@ class OrderContent extends React.Component{
             // only when editable
             onChange: props.onChange,
             onProductDelete: props.onProductDelete,
+            onProductUpdate: props.onProductUpdate,
         };
-        this.getOrderSum = this.getOrderSum.bind(this);
-    }
-
-    getOrderSum(order) {
-        let orderSum = 0;
-        order.orderProducts.forEach(oPr => orderSum += oPr.qty * oPr.price);
-        return orderSum;
     }
 
     render(){
@@ -27,11 +21,14 @@ class OrderContent extends React.Component{
             .map((orderProduct,i) => {
                 return <OrderProductPreview orderProduct={orderProduct} 
                 onDelete={this.state.onProductDelete} 
+                onChange={this.state.onProductUpdate} 
                 editable={editable} 
                 key={i} />
             });
         const customerName = this.state.order.customer ? this.state.order.customer.fName + ' ' + this.state.order.customer.lName : null;
-        const totalSum = this.getOrderSum(order);
+        const totalSum = Util.getOrderSum(order);
+        const totalSumString = Util.roundToTwoString(totalSum);
+        const vatSum = Util.getVatSum(totalSum);
         return (
             <table className="table">
                 <thead>
@@ -61,7 +58,15 @@ class OrderContent extends React.Component{
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{totalSum}</td>
+                        <td>{totalSumString}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>с ДДС: {vatSum}</td>
                         <td></td>
                     </tr>
                 </tbody>

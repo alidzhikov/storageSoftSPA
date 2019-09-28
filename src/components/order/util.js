@@ -22,10 +22,15 @@ const roundToTwoString = (number) => {
     return (Math.round(number * 100) / 100).toFixed(2)
 };
 
+const getDebt = (vatSum, paidAmount) => {
+    return vatSum - paidAmount;
+};
+
 module.exports = {
     getVatSum: getVatSum,
     getOrderSum: getOrderSum,
     getSoldAmount: getSoldAmount,
     roundToTwo: roundToTwo,
-    roundToTwoString: roundToTwoString
+    roundToTwoString: roundToTwoString,
+    getDebt: getDebt
 }

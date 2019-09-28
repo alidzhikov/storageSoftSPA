@@ -14,12 +14,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    // onChangeEmail: value =>
-    //   dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
-    // onChangePassword: value =>
-    //   dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-    // onUnload: () =>
-    //   dispatch({ type: REGISTER_PAGE_UNLOADED })
     onEdit: (element, type) => {
         const payload = agent[Util.firstCharToUppercase(type)].update(element);
         dispatch({ type:  actionTypes[type.toUpperCase() + '_EDIT'], payload });
@@ -49,20 +43,22 @@ class Input extends React.Component {
     }
 
     componentWillMount() {
-
-        this.isEditOrAdd()
+        this.isEditOrAdd();
     }
 
     isEditOrAdd() {
         const id = this.props.paramID;
-        
         if(!id) return;
         this.setState(state => {
+            console.log(state.element);
+
             state.element = 
-                this.props[state.type][state.type + 's'] ?
+                this.props[state.type] && this.props[state.type][state.type + 's'] ?
                     this.props[state.type][state.type + 's'].find(el => el._id === id) : 
                     state.element;
             state.element._id = id;
+            console.log(state.element);
+            return state;
         });
     }
 
@@ -71,11 +67,12 @@ class Input extends React.Component {
             this.state.onSubmitNoDb(this.state.element);
         }else{
             this.setState(state => {
+                state.element = this.props.element;
                 state.element.creator = state.isEdit ? 
                 state.element.creator : this.props.user._id;
                 state.isSubmitting = true;
             });
-            console.log(this.state.element);
+            console.log(this.state);
             if(this.state.isEdit){
                 this.props.onEdit({ ...this.state.element}, this.state.type);
             }else{
@@ -83,24 +80,23 @@ class Input extends React.Component {
             }
         }
     }
-
+    //remove this
     onCancel(){
         this.state.onCancelParent(this.state.elementOriginal);
     }
 
-    handleChange(event) {
-        
+    handleChange(event) {  
         const key = event.target.name;
         const value = event.target.value;
         this.setState(state => {
-            Util.setValueFromKey(state.element, key, value);
+            Util.setValueFromKey(this.props.element, key, value);
             return state;
         });
     }
 
     assembleFormFields(formFields) {
         return formFields.map((field,index) => {
-            const value = Util.getValueFromKey(this.state.element, field.name);
+            const value = Util.getValueFromKey(this.props.element, field.name);
             if(field.name === 'customerID'){
                 return <CustomerFormField 
                     value={value} 
@@ -129,11 +125,11 @@ class Input extends React.Component {
     }
 
     render() {
+        console.log(this.props);
         const isSubmitting = this.state.isSubmitting;
         const formFields = this.assembleFormFields(this.props.formFields);
         if(this.state.onSubmitNoDb){
-            const label = this.state.element.product.name;
-            // const onCancel = this.onCancel;
+            const label = this.props.element.product.name;
             return (
                 <tr>
                     <td>
@@ -145,7 +141,6 @@ class Input extends React.Component {
                                     {formFields}    
                                     {status && status.msg && <div>{status.msg}</div>}
                                     <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Запазване</button>
-                                    {/* <button onClick={onCancel} className="btn btn-danger" disabled={isSubmitting}>Отказ</button> */}
                                 </Form>
                             )}
                         />

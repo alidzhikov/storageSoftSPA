@@ -18,7 +18,6 @@ class OrderView extends React.Component{
         };
     }
 
-
     rdf(order) {
         OrderViewPDF(order);
     }

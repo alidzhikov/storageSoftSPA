@@ -39,13 +39,15 @@ class Body extends Component {
     
     componentWillMount() {
         let user = localStorage.getItem('user');
-        user = user ? (JSON.parse(user)).token : null;
+        user = user ? JSON.parse(user) : null;
         if(user){
             agent.setToken(user.token);
             const props = this.props;
             setTimeout(function(){
                 props.onLoad(user.currentUser, user.token);
             },500);
+        }else{
+            this.props.onLoad();
         }
         this.props.onLoadCustomers(agent.Customer.getAll());
         this.props.onLoadProducts(agent.Product.getAll());

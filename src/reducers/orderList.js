@@ -13,8 +13,8 @@ import {
             ...state,
             orders: action.payload.orders,
           };
-        case ORDER_PAGE_UNLOADED:
-          return {};
+        // case ORDER_PAGE_UNLOADED:
+        //   return {};
         case ORDER_ADD:
           state.orders = state.orders ? state.orders : [];
           return {

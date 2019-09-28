@@ -2,6 +2,7 @@ import axios from 'axios';
 import ProductCtr from './models/product';
 import CustomerCtr from './models/customer';
 import StockCtr from './models/stock';
+import OrderCtr from './models/order';
 
 const API_ROOT = process.env.REACT_APP_API_URL;
 const conentTypeJsonHeader = {'Content-Type': 'application/json'};
@@ -34,9 +35,8 @@ const requests = {
   const Product = {
     getAll: () => 
       requests.get('products').then(res => {
-        if(res && res.data){
-          res.data.products = res.data.products.map(el => new ProductCtr(el));
-        }
+        if(res && res.data)
+          res.data.products = res.data.products.map(el => new ProductCtr(el));       
         return res;
       }),
     getId: (id) =>
@@ -52,9 +52,8 @@ const requests = {
   const Customer = {
     getAll: () => 
       requests.get('customers').then(res => {
-        if(res && res.data){
+        if(res && res.data)
           res.data.customers = res.data.customers.map(el => new CustomerCtr(el));
-        }
         return res;
       }),
     getId: (id) =>
@@ -69,7 +68,11 @@ const requests = {
 
   const Order = {
     getAll: () => 
-      requests.get('orders'),
+    requests.get('orders').then(res => {
+      if(res && res.data)
+        res.data.orders = res.data.orders.map(el => new OrderCtr(el));
+      return res;
+    }),
     getId: (id) =>
       requests.get('orders/' + id),
     update: order =>
@@ -83,9 +86,8 @@ const requests = {
   const Stock = {
     getAll: () => 
       requests.get('stocks').then(res => {
-        if(res && res.data){
+        if(res && res.data)
           res.data.stocks = res.data.stocks.map(el => new StockCtr(el));
-        }
         return res;
       }),
     getId: (id) =>

@@ -5,7 +5,6 @@ class OrderContent extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            order: props.order,
             // only when editable
             onChange: props.onChange,
             onProductDelete: props.onProductDelete,
@@ -14,7 +13,7 @@ class OrderContent extends React.Component{
     }
 
     render(){
-        const order = this.state.order;
+        const order = this.props.order;
         if(!order) return 'Поръчката не е намерена.';
         const editable =!(this.state.onChange === undefined || this.state.onProductDelete === undefined);
         const products = order.orderProducts
@@ -25,10 +24,12 @@ class OrderContent extends React.Component{
                 editable={editable} 
                 key={i} />
             });
-        const customerName = this.state.order.customer ? this.state.order.customer.fName + ' ' + this.state.order.customer.lName : null;
+        const customerName = this.props.order.customer ? this.props.order.customer.fName + ' ' + this.props.order.customer.lName : null;
         const totalSum = Util.getOrderSum(order);
         const totalSumString = Util.roundToTwoString(totalSum);
         const vatSum = Util.getVatSum(totalSum);
+        let debt = Util.getDebt(vatSum, order.paidAmount); 
+        debt = debt > 0 ? (<span>- {order.paidAmount} = {debt} лв.</span>) : (<span>Платено</span>);
         return (
             <table className="table">
                 <thead>
@@ -66,7 +67,7 @@ class OrderContent extends React.Component{
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>с ДДС: {vatSum}</td>
+                        <td>с ДДС: {vatSum} {debt}</td>
                         <td></td>
                     </tr>
                 </tbody>

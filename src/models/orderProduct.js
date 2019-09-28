@@ -3,11 +3,11 @@ export default class OrderProduct {
     price;
     qty;
 
-    constructor(
+    constructor({
         product=null,
         price = 0,
         qty=0
-    ){
+    }){
         this.product = product;
         this.price = price;
         this.qty = qty;

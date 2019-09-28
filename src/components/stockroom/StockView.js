@@ -13,16 +13,23 @@ const StockView = props => {
             return acc;
         }, {}))
         .map((stock,i) =>
-            (<div key={i}>
-                {stock.product.name} --> {stock.amount} бр.
-            </div>));
+            (<tr key={i}>
+                <td>{stock.product.name}</td>
+                <td>{stock.amount} бр.</td>
+            </tr>));
 
     return (
-        <div>
-            <h1>Наличност</h1>
-            {stocks}
-            <hr/>
-        </div>
+        <table className="table">
+            <thead>
+                <tr>
+                    <th>Продукт</th>
+                    <th>Наличност</th>
+                </tr>
+            </thead>
+            <tbody>
+                {stocks}
+            </tbody>
+        </table>
     );
 }
 

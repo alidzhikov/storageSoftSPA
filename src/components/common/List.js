@@ -23,16 +23,76 @@ const List = props => {
 
   return (
     <div>
-      {
-        props.elements.map((element) => <Preview type={props.type} element={element} key={element._id} /> )
-      }
       <br/>
       <AddButton type={props.type}/>
+      <table className="table">
+        <thead>
+         
+            <Head type={props.type}/>
+         
+        </thead>
+        <tbody>
+        {
+          props.elements.map((element) => <Item type={props.type} element={element} key={element._id} /> )
+        }
+        </tbody>
+      </table>
     </div>
   );
 };
 
 export default List;
+
+function Head(props){
+  switch(props.type){
+    case 'product':
+      return (
+        <tr>
+          <th>Име</th>
+          <th>Размер</th>
+          <th>Цена без ДДС</th>
+          <th></th>
+          <th></th>
+        </tr>
+      );
+    case 'customer':
+      return (
+        <tr>
+          <th>Име</th>
+          <th>Фамилия</th>
+          <th>Фирма</th>
+          <th>Телефон</th>
+          <th></th>
+          <th></th>
+        </tr>
+      );
+    case 'order':
+        return (
+          <tr>
+            <th>Клиент</th>
+            <th>Дата на създаване</th>
+            <th>Брой</th>
+            <th>Сума</th>
+            <th>Сума с ДДС</th>
+            <th>Неизплатено</th>
+            <th></th>
+            <th></th>
+          </tr>
+        );
+    case 'stockroom':
+      return (
+        <tr>
+          <th>Продукт</th>
+          <th>Добавено количество</th>
+          <th>Дата на зареждане</th>
+          <th></th>
+          <th></th>
+        </tr>
+      );
+    default:
+      return null;
+  }
+}
 
 function AddButton(props){
   switch(props.type){
@@ -49,7 +109,7 @@ function AddButton(props){
   }
 }
 
-function Preview(props){
+function Item(props){
   switch(props.type){
     case 'product':
       return <ProductPreview product={props.element} key={props.element._id} />;

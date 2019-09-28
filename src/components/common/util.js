@@ -1,3 +1,7 @@
+import moment from 'moment';
+import 'moment/locale/bg'
+moment.locale('bg');
+
 export function firstCharToUppercase(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -22,4 +26,8 @@ export function setValueFromKey(element, fieldName, value){
         }
     });
     return element;
+}
+
+export function formatDate(date){
+    return moment(date.toString()).format('lll');
 }

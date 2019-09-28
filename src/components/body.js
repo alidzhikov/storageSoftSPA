@@ -110,9 +110,6 @@ function LoggedOutMenu(props){
     if(!props.loggedIn){
         return (
             <ul className="navbar-nav">
-                <li className="nav-item active">
-                    <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
-                </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/login">Вход</Link>
                 </li>
@@ -130,9 +127,6 @@ function LoggedInMenu(props){
         const fName = props.user.fName;
         return (
             <ul className="navbar-nav">
-                <li className="nav-item active">
-                    <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
-                </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/orders">Поръчки</Link>
                 </li>
@@ -146,10 +140,10 @@ function LoggedInMenu(props){
                     <Link className="nav-link" to="/stockroom">Склад</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/" className="nav-link" onClick={props.logoutCb}>Изход</Link>
+                    <Link to="/" className="nav-link">{fName}</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/" className="nav-link">{fName}</Link>
+                    <Link to="/" className="nav-link" onClick={props.logoutCb}>Изход</Link>
                 </li>
             </ul>
         );

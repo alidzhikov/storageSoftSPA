@@ -23,11 +23,13 @@ const ProductPreview = props => {
   const productEditURL = "/editProduct/" + product._id;
 
   return (
-    <div className="product-preview" key={product._id}>
-      <p>{product.name} - {product.size} - {product.basePrice}</p>
-      <Link to={productEditURL}><button className="btn btn-primary">Редактирай</button></Link>
-      <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
-    </div>
+    <tr className="order-preview" key={product._id}>
+      <td>{product.name}</td>
+      <td>{product.size}</td>
+      <td>{product.basePrice}</td>
+      <td><Link to={productEditURL}><button className="btn btn-primary">Редактирай</button></Link></td>
+      <td><button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button></td>
+    </tr>
   );
 }
 

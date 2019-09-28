@@ -23,11 +23,14 @@ const CustomerPreview = props => {
   const customerEditURL = "/editCustomer/" + customer._id;
 
   return (
-    <div className="customer-preview" key={customer._id}>
-      <p>{customer.fName} - {customer.lName}</p>
-      <Link to={customerEditURL}><button className="btn btn-primary">Редактирай</button></Link>
-      <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
-    </div>
+    <tr className="order-preview" key={customer._id}>
+      <td>{customer.fName}</td>
+      <td>{customer.lName}</td>
+      <td>{customer.companyName}</td>
+      <td>{customer.phoneNumber}</td>
+      <td><Link to={customerEditURL}><button className="btn btn-primary">Редактирай</button></Link></td>
+      <td><button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button></td>
+    </tr>
   );
 }
 

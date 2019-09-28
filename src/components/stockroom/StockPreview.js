@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { STOCK_REMOVE } from '../../constants/actionTypes';
+import { formatDate } from '../common/util';
 
 const mapDispatchToProps = dispatch => ({
   onDelete: id => {
@@ -12,7 +13,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const StockPreview = props => {
-  console.log("asdasddas");
   const stock = props.stock;
   const onDeleteEv = (ev) => { 
     ev.preventDefault(); 
@@ -24,11 +24,13 @@ const StockPreview = props => {
   const stockEditURL = "/editStock/" + stock._id;
 
   return (
-    <div className="stock-preview" key={stock._id}>
-      <p>{stock.product.name} - {stock.amount} бр. {stock.createdAt} </p>
-      <Link to={stockEditURL}><button className="btn btn-primary">Редактирай</button></Link>
-      <button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button>
-    </div>
+    <tr className="order-preview" key={stock._id}>
+      <td>{stock.product.name}</td>
+      <td>{stock.amount} бр.</td>
+      <td>{formatDate(stock.createdAt)}</td>
+      <td><Link to={stockEditURL}><button className="btn btn-primary">Редактирай</button></Link></td>
+      <td><button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button></td>
+    </tr>
   );
 }
 

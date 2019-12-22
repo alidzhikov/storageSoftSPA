@@ -52,6 +52,8 @@ const requests = {
   const Customer = {
     getAll: () => 
       requests.get('customers').then(res => {
+        console.log(res);
+        console.log("--");
         if(res && res.data)
           res.data.customers = res.data.customers.map(el => new CustomerCtr(el));
         return res;

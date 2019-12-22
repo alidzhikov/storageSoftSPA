@@ -9,6 +9,10 @@ export default class Customer {
     phoneNumber;
     prices;
     creator;
+    reatedAt;
+    updatedAt;
+    __v;
+    _id;
     constructor({
         fName = '',
         lName = '',

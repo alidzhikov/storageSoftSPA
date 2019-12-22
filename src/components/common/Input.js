@@ -50,16 +50,17 @@ class Input extends React.Component {
         const id = this.props.paramID;
         if(!id) return;
         this.setState(state => {
-            console.log(state.element);
-
             state.element = 
                 this.props[state.type] && this.props[state.type][state.type + 's'] ?
                     this.props[state.type][state.type + 's'].find(el => el._id === id) : 
                     state.element;
             state.element._id = id;
-            console.log(state.element);
+            Object.keys(this.props.element).forEach(key => {
+                this.props.element[key] = state.element[key];
+            });
             return state;
         });
+      
     }
 
     onSubmit() {
@@ -67,12 +68,13 @@ class Input extends React.Component {
             this.state.onSubmitNoDb(this.state.element);
         }else{
             this.setState(state => {
+                this.props.element._id = state.element._id;
+                if(state.element.address)
+                    this.props.element.address = state.element.address;
+                state.element.creator = state.isEdit ? state.element.creator : this.props.user._id;;
                 state.element = this.props.element;
-                state.element.creator = state.isEdit ? 
-                state.element.creator : this.props.user._id;
                 state.isSubmitting = true;
             });
-            console.log(this.state);
             if(this.state.isEdit){
                 this.props.onEdit({ ...this.state.element}, this.state.type);
             }else{
@@ -125,7 +127,6 @@ class Input extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         const isSubmitting = this.state.isSubmitting;
         const formFields = this.assembleFormFields(this.props.formFields);
         if(this.state.onSubmitNoDb){

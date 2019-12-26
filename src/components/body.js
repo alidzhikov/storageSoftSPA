@@ -6,6 +6,7 @@ import ProductComponent from './product/index';
 import ProductInput from './product/ProductInput';
 import CustomerComponent from './customer/index';
 import CustomerInput from './customer/CustomerInput';
+import CustomerView from './customer/CustomerView';
 import OrderComponent from './order/index';
 import OrderInput from './order/OrderInput';
 import OrderView from './order/OrderView';
@@ -90,6 +91,7 @@ class Body extends Component {
                 <Route path="/login" component={Login} />
                 <Route path="/products" component={ProductComponent} />
                 <Route path="/customers" component={CustomerComponent} />
+                <Route path="/customerView/:customerID" component={CustomerView} />
                 <Route path="/addCustomer" component={CustomerInput} />
                 <Route path="/editCustomer/:customerID" component={CustomerInput} />
                 <Route path="/stockroom" component={StockroomComponent} />

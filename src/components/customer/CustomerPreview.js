@@ -20,12 +20,13 @@ const CustomerPreview = props => {
       props.onDelete(customer._id);
     }
   };
+  const customerViewURL = "/customerView/" + customer._id;
   const customerEditURL = "/editCustomer/" + customer._id;
 
   return (
     <tr className="order-preview" key={customer._id}>
-      <td>{customer.fName}</td>
-      <td>{customer.lName}</td>
+      <td><Link to={customerViewURL}>{customer.fName}</Link></td>
+      <td><Link to={customerViewURL}>{customer.lName}</Link></td>
       <td>{customer.companyName}</td>
       <td>{customer.phoneNumber}</td>
       <td><Link to={customerEditURL}><button className="btn btn-primary">Редактирай</button></Link></td>

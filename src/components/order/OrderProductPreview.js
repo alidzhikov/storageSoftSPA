@@ -42,8 +42,17 @@ export default class OrderProductPreview extends React.Component{
     this.setState(state => state.isEditingInOrderMode = false);
   }
 
+  isClientPrice(orderProduct) {
+    if (orderProduct.product.basePrice !== orderProduct.price) {
+      return (
+        <span> ({orderProduct.product.basePrice}*)</span>
+      )
+    }
+  }
+
   render() {
     const orderProduct = this.state.orderProduct;
+    const isClientPrice = this.isClientPrice(orderProduct);
     const onSwitchEditOrderProduct = this.onSwitchEditOrderProduct;
     const onSaveOrderProduct = this.onSaveOrderProduct;
     const onDeleteOrderProduct = this.onDeleteOrderProduct;
@@ -84,7 +93,10 @@ export default class OrderProductPreview extends React.Component{
           <td>{orderProduct.product.name} </td>
           <td>{orderProduct.product.size} </td>
           <td>{orderProduct.qty} </td>
-          <td>{Util.roundToTwoString(orderProduct.price)} </td>
+          <td>
+            {Util.roundToTwoString(orderProduct.price)} 
+            {isClientPrice}
+          </td>
           <td>{Util.roundToTwoString(orderProduct.price*orderProduct.qty)} </td>
           <td>{buttons}</td>
         </tr>

@@ -2,6 +2,7 @@ import {
   CUSTOMER_PAGE_LOADED,
   CUSTOMER_ADD,
   CUSTOMER_EDIT,
+  CUSTOMER_PRICES_UPDATE,
   CUSTOMER_REMOVE
 } from '../constants/actionTypes';
 
@@ -29,6 +30,13 @@ export default (state = {}, action) => {
           redirectTo: '/customers?edit=success',
           customers: [...state.customers.slice(0, indexToEdit), action.payload.customer, ...state.customers.slice(indexToEdit + 1)]
         }
+      case CUSTOMER_PRICES_UPDATE: 
+        state.customers = state.customers ? state.customers : [];
+        const indexToPriceUpdate = state.customers.findIndex(customer => customer._id === action.payload.customer._id);
+        return {
+          ...state,
+          customers: [...state.customers.slice(0, indexToPriceUpdate), action.payload.customer, ...state.customers.slice(indexToPriceUpdate + 1)]
+      }
       case CUSTOMER_REMOVE:
         const indexToDel = state.customers.findIndex(customer => customer._id === action.payload.customerID);
         return {

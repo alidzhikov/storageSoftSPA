@@ -20,7 +20,7 @@ import {
           return {
             ...state,
             redirectTo: '/orders',
-            orders: [ ...state.orders, action.payload.order]
+            orders: [ action.payload.order, ...state.orders]
           }
         case ORDER_EDIT: 
           state.orders = state.orders ? state.orders : [];

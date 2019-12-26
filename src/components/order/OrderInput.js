@@ -4,12 +4,21 @@ import OrderProduct from '../../models/orderProduct';
 import Input from '../common/Input';
 import OrderContent from './OrderContent';
 import { connect } from 'react-redux';
+import agent from '../../agent';
+import { CUSTOMER_PRICES_UPDATE } from '../../constants/actionTypes';
 
 const mapStateToProps = state => ({
     customerState: state.customer,
     orderState: state.order
 });
 
+const mapDispatchToProps = dispatch => ({
+    onCustomerChange: id => {
+        const payload = agent.Customer.getId(id);
+        dispatch({type:  CUSTOMER_PRICES_UPDATE, payload});
+        return payload;
+    }
+  });
 class OrderInput extends React.Component{
     constructor(props){
         super(props);
@@ -87,7 +96,21 @@ class OrderInput extends React.Component{
             }else{
                 state.order.orderProducts.push(orderProduct);
             }
+            if(!update)
+                this.onProductPriceChange(state.order.orderProducts, state.order.customer)
             return state;
+        });
+    }
+
+    onProductPriceChange(orderProducts, customer) {
+        if (!customer || !customer.prices) return orderProducts;
+        const prices = customer.prices;
+        return orderProducts.map(orderProduct => {
+            const customerPrice = prices.find(price => orderProduct.product._id === price.productId);
+            if (customerPrice && orderProduct.product.price !== customerPrice.price) {
+                orderProduct.price = customerPrice.price;
+            }    
+            return orderProduct;
         });
     }
 
@@ -98,12 +121,29 @@ class OrderInput extends React.Component{
         });
     }
 
-    onCustomerSelect(customer){
-        this.setState(state => {
-            state.order.customer = customer;
-            state.order.customerID = customer._id;
-            return state;
-        });
+    onCustomerSelect(customer) {
+        //some loader ui
+        const stateCustomer = this.props.customerState.customers.find(c => c._id === customer._id);
+        if (!stateCustomer.prices || stateCustomer.prices.length === 0) {
+            this.props.onCustomerChange(stateCustomer._id)
+                .then(res => 
+                    this.setState(state => {
+                        const customer = res.data.customer;
+                        if(!customer) return state;                        
+                        state.order.customer = customer;
+                        state.order.customerID = customer._id;
+                        state.order.orderProducts = this.onProductPriceChange(state.order.orderProducts, state.order.customer);
+                        return state;
+                    })
+                );
+        } else {
+            this.setState(state => {
+                state.order.customer = stateCustomer;
+                state.order.customerID = stateCustomer._id;
+                state.order.orderProducts = this.onProductPriceChange(state.order.orderProducts, state.order.customer);
+                return state;
+            });
+        }
     }
 
     render(){
@@ -124,10 +164,14 @@ class OrderInput extends React.Component{
                     paramID={orderID} 
                     isEdit={isEdit}
                     label={ (!isEdit ? 'Създай' : 'Редактирай') + ' поръчка'} />
-                <OrderContent order={order} onChange={onProductAdd} onProductUpdate={onProductUpdate} onProductDelete={onProductDelete} />
+                <OrderContent 
+                    order={order} 
+                    onChange={onProductAdd} 
+                    onProductUpdate={onProductUpdate} 
+                    onProductDelete={onProductDelete} />
             </div>
         );
     }
 }
 
-export default connect(mapStateToProps, {})(OrderInput);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderInput);

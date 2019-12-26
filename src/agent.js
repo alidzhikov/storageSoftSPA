@@ -52,8 +52,6 @@ const requests = {
   const Customer = {
     getAll: () => 
       requests.get('customers').then(res => {
-        console.log(res);
-        console.log("--");
         if(res && res.data)
           res.data.customers = res.data.customers.map(el => new CustomerCtr(el));
         return res;
@@ -72,7 +70,7 @@ const requests = {
     getAll: () => 
     requests.get('orders').then(res => {
       if(res && res.data)
-        res.data.orders = res.data.orders.map(el => new OrderCtr(el));
+        res.data.orders = res.data.orders.map(el => new OrderCtr(el)).reverse();
       return res;
     }),
     getId: (id) =>

@@ -8,6 +8,7 @@ export default class Order{
     creator;
     createdAt;
     lastModified;
+    orderedAt;
 
     constructor({
         orderProducts = [],
@@ -16,6 +17,7 @@ export default class Order{
         paidAmount = 0,
         creator = null,
         lastModified = null,
+        orderedAt = null,
         createdAt = null,
         updatedAt = null,
         __v = null,
@@ -28,6 +30,7 @@ export default class Order{
         this.creator = creator;
         this.createdAt = createdAt;
         this.lastModified = lastModified;
+        this.orderedAt = orderedAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.__v = __v;

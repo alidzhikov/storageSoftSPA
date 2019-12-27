@@ -41,6 +41,7 @@ class OrderInput extends React.Component{
 
     getFormFields(){
         const order = this.state.order;
+        order.orderedAt = order && order.orderedAt ? order.orderedAt : new Date();
         return [
             {
                 name: 'customerID', 
@@ -61,6 +62,13 @@ class OrderInput extends React.Component{
                 label: 'Платено',
                 placeholder: 'Платена сума',
                 value: order ? order.paidAmount : 0,
+            },
+            {
+                name: 'orderedAt',
+                label: 'Поръчано на',
+                placeholder: 'Въведи дата на поръчване',
+                value: order.orderedAt,
+                onChange: this.onOrderedDateChange.bind(this)
             }
         ];
     }
@@ -144,6 +152,13 @@ class OrderInput extends React.Component{
                 return state;
             });
         }
+    }
+
+    onOrderedDateChange(name, val) {
+        this.setState(state => {
+            state.order.orderedAt = val;
+            return state;
+        });
     }
 
     render(){

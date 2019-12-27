@@ -1,6 +1,7 @@
 import React from 'react';
 import OrderProductPreview from './OrderProductPreview';
 import Util from './util';
+import { formatDate } from '../common/util';
 class OrderContent extends React.Component{
     constructor(props){
         super(props);
@@ -12,10 +13,47 @@ class OrderContent extends React.Component{
         };
     }
 
+    orderTableHeaders() {
+        return this.isEditable() ? 
+            (
+                <tr>
+                    <th scope="col">Клиент</th>
+                </tr>
+            ) : 
+            (
+                <tr>
+                    <th scope="col">Клиент</th>
+                    <th  scope="col">Поръчано на</th>
+                    <th  scope="col">Създадено на</th>
+                </tr>
+            );
+    }
+
+    orderTableBody() {
+        const customerName = this.props.order.customer ? this.props.order.customer.fName + ' ' + this.props.order.customer.lName : null;
+        return this.isEditable() ?
+        (
+            <tr>
+                <td>{customerName}</td>
+            </tr>
+        ) :
+        (
+            <tr>
+                <td>{customerName}</td>
+                <td>{formatDate(this.props.order.orderedAt)}</td>
+                <td>{formatDate(this.props.order.createdAt)}</td>
+            </tr>
+        );
+    }
+
+    isEditable() {
+        return !(this.state.onChange === undefined || this.state.onProductDelete === undefined);
+    }
+
     render(){
         const order = this.props.order;
         if(!order) return 'Поръчката не е намерена.';
-        const editable =!(this.state.onChange === undefined || this.state.onProductDelete === undefined);
+        const editable = this.isEditable();
         const products = order.orderProducts
             .map((orderProduct,i) => {
                 return <OrderProductPreview orderProduct={orderProduct} 
@@ -24,23 +62,21 @@ class OrderContent extends React.Component{
                 editable={editable} 
                 key={i} />
             });
-        const customerName = this.props.order.customer ? this.props.order.customer.fName + ' ' + this.props.order.customer.lName : null;
+     
         const totalSum = Util.getOrderSum(order);
         const totalSumString = Util.roundToTwoString(totalSum);
         const vatSum = Util.getVatSum(totalSum);
-        let debt = Util.getDebt(vatSum, order.paidAmount); 
+        let debt =  Util.roundToTwoString(Util.getDebt(vatSum, order.paidAmount)); 
         debt = debt > 0 ? (<span>- {order.paidAmount} = {debt} лв.</span>) : (<span>Платено</span>);
+        const tHeads = this.orderTableHeaders();
+        const tBody = this.orderTableBody();
         return (
             <table className="table">
                 <thead>
-                    <tr>
-                        <th scope="col">Клиент</th>
-                    </tr>
+                    {tHeads}
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{customerName}</td>
-                    </tr>
+                    {tBody}
                 </tbody>
                 <thead>
                     <tr>

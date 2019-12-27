@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import agent from '../../agent';
 import CustomerFormField from '../order/form-fields/customer';
 import ProductFormField from '../order/form-fields/product';
+import DatepickerFormField from './form-fields/DatepickerFormField';
 
 const mapStateToProps = state => ({
     customer: state.customer,
@@ -97,32 +98,41 @@ class Input extends React.Component {
     }
 
     assembleFormFields(formFields) {
-        return formFields.map((field,index) => {
+        return formFields.map((field, index) => {
             const value = Util.getValueFromKey(this.props.element, field.name);
-            if(field.name === 'customerID'){
-                return <CustomerFormField 
-                    value={value} 
-                    options={this.props.customer.customers} 
-                    name={field.label} 
-                    placeholder={field.placeholder} 
-                    onChange={field.onChange} 
-                    key={index}/>
-            }else if(field.name === 'products' || field.name === 'product'){
-                return <ProductFormField 
-                    value={value} 
-                    options={this.props.product.products} 
-                    name={field.label} 
-                    placeholder={field.placeholder} 
-                    onChange={field.onChange} 
-                    key={index}/>
+            switch (field.name){
+                case 'customerID': 
+                    return <CustomerFormField
+                        value={value} 
+                        options={this.props.customer.customers} 
+                        name={field.label} 
+                        placeholder={field.placeholder} 
+                        onChange={field.onChange} 
+                        key={index}/>
+                case 'products' || 'product' :
+                    return <ProductFormField 
+                        value={value} 
+                        options={this.props.product.products} 
+                        name={field.label} 
+                        placeholder={field.placeholder} 
+                        onChange={field.onChange} 
+                        key={index}/>
+                case 'orderedAt': 
+                    return <DatepickerFormField
+                        value={value} 
+                        name={field.label} 
+                        placeholder={field.placeholder} 
+                        onChange={field.onChange} 
+                        key={index}/>
+                default :
+                    return (
+                        <div className="form-group" key={index}>
+                        <label htmlFor={field.name}>{field.label}</label>
+                        <Field type="text" value={value} onChange={this.handleChange} className="form-control" placeholder={field.placeholder} name={field.name} />
+                        <ErrorMessage name={field.name} component="div" />  
+                        </div>
+                    )
             }
-            return (
-                <div className="form-group" key={index}>
-                <label htmlFor={field.name}>{field.label}</label>
-                <Field type="text" value={value} onChange={this.handleChange} className="form-control" placeholder={field.placeholder} name={field.name} />
-                <ErrorMessage name={field.name} component="div" />  
-                </div>
-            );
         });
     }
 
@@ -159,6 +169,7 @@ class Input extends React.Component {
                         <Form>
                             {formFields}    
                             {status && status.msg && <div>{status.msg}</div>}
+                            <br/>
                             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Запазване</button>
                         </Form>
                     )}

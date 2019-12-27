@@ -29,5 +29,6 @@ export function setValueFromKey(element, fieldName, value){
 }
 
 export function formatDate(date){
+    if(!date) return;
     return moment(date.toString()).format('lll');
 }

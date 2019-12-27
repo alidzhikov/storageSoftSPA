@@ -33,7 +33,7 @@ const OrderPreview = props => {
   const totalSum = Util.getOrderSum(order);
   const vatSum = Util.getVatSum(totalSum);
 
-  let debt = Util.getDebt(vatSum, order.paidAmount);
+  let debt = Util.roundToTwoString(Util.getDebt(vatSum, order.paidAmount));
   debt = debt > 0 ? debt : 0;
   return (
     <tr className="order-preview" key={order._id}>

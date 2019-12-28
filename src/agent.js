@@ -90,6 +90,12 @@ const requests = {
           res.data.stocks = res.data.stocks.map(el => new StockCtr(el));
         return res;
       }),
+    getProductsOrdered: () =>
+      requests.get('stocks/productsOrdered').then(res => {
+        if (res && res.data)
+          res.data.orderedStocks = res.data.orderedStocks.map(el => new StockCtr(el));
+        return res;
+      }),
     getId: (id) =>
       requests.get('stocks/' + id),
     update: stock =>

@@ -1,6 +1,7 @@
 export default class Stock {
     product;
     amount;
+    sold;
     creator;
     createdAt;
     updatedAt;
@@ -10,6 +11,7 @@ export default class Stock {
     constructor({
         product = '',
         amount = 0,
+        sold = 0,
         createdAt = null,
         updatedAt = null,
         creator = null,
@@ -18,6 +20,7 @@ export default class Stock {
     }){
         this.product = product;
         this.amount = amount;
+        this.sold = sold;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.creator = creator;

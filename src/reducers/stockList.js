@@ -1,5 +1,6 @@
 import {
-  STOCK_PAGE_LOADED,
+  STOCK_PAGE_IN_LOADED,
+  STOCK_PAGE_OUT_LOADED,
   STOCK_ADD,
   STOCK_EDIT,
   STOCK_REMOVE
@@ -7,13 +8,19 @@ import {
 
 export default (state = {}, action) => {
     switch(action.type){
-      case STOCK_PAGE_LOADED:
+      case STOCK_PAGE_IN_LOADED:
         return {
           ...state,
+          redirectTo: '/stocks',
           stocks: action.payload.stocks,
         };
       // case STOCK_PAGE_UNLOADED:
       //   return {};
+      case STOCK_PAGE_OUT_LOADED:
+        return {
+          ...state,
+          orderedStocks: action.payload.orderedStocks,
+        };
       case STOCK_ADD:
         state.stocks = state.stocks ? state.stocks : [];
         return {

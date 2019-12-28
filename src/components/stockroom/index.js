@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import List from '../common/List';
-import {STOCK_PAGE_LOADED, STOCK_PAGE_UNLOADED} from '../../constants/actionTypes';
+import {STOCK_PAGE_IN_LOADED, STOCK_PAGE_OUT_LOADED, STOCK_PAGE_UNLOADED} from '../../constants/actionTypes';
 import agent from '../../agent';
 import StockView from './StockView';
 
@@ -12,8 +12,10 @@ const mapStateToProps = state => ({
 });
   
 const mapDispatchToProps = dispatch => ({
-  onLoad: (payload) =>
-    dispatch({ type: STOCK_PAGE_LOADED, payload }),
+  onLoad: (inc, outc) => {
+    dispatch({ type: STOCK_PAGE_IN_LOADED, payload: inc });
+    dispatch({ type: STOCK_PAGE_OUT_LOADED, payload: outc });
+  },
   onUnload: () =>
     dispatch({ type: STOCK_PAGE_UNLOADED })
 });
@@ -21,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 class Stockroom extends React.Component {
 
   componentWillMount() {
-    this.props.onLoad(agent.Stock.getAll());    
+    this.props.onLoad(agent.Stock.getAll(), agent.Stock.getProductsOrdered());    
   }
   
   componentWillUnmount() {
@@ -30,7 +32,7 @@ class Stockroom extends React.Component {
 
   render() {
     return <div>
-        <StockView stocks={this.props.stocks} />
+        <StockView stocks={this.props.stocks} orderedStocks={this.props.orderedStocks}/>
         <List elements={this.props.stocks} type="stockroom"/>
       </div>
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Util from './util';
 import * as actionTypes from '../../constants/actionTypes';
+import fieldTypes from '../../constants/fieldTypes';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { connect } from 'react-redux';
 import agent from '../../agent';
@@ -100,8 +101,8 @@ class Input extends React.Component {
     assembleFormFields(formFields) {
         return formFields.map((field, index) => {
             const value = Util.getValueFromKey(this.props.element, field.name);
-            switch (field.name){
-                case 'customerID': 
+            switch (field.type){
+                case fieldTypes.CUSTOMER_FIELD: 
                     return <CustomerFormField
                         value={value} 
                         options={this.props.customer.customers} 
@@ -109,7 +110,7 @@ class Input extends React.Component {
                         placeholder={field.placeholder} 
                         onChange={field.onChange} 
                         key={index}/>
-                case 'products' || 'product' :
+                case fieldTypes.PRODUCT_FIELD:// use not strings but typed fields for tthis
                     return <ProductFormField 
                         value={value} 
                         options={this.props.product.products} 
@@ -117,7 +118,7 @@ class Input extends React.Component {
                         placeholder={field.placeholder} 
                         onChange={field.onChange} 
                         key={index}/>
-                case 'orderedAt': 
+                case fieldTypes.DATE_FIELD: 
                     return <DatepickerFormField
                         value={value} 
                         name={field.label} 

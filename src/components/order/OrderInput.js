@@ -6,6 +6,7 @@ import OrderContent from './OrderContent';
 import { connect } from 'react-redux';
 import agent from '../../agent';
 import { CUSTOMER_PRICES_UPDATE } from '../../constants/actionTypes';
+import fieldTypes from '../../constants/fieldTypes';
 
 const mapStateToProps = state => ({
     customerState: state.customer,
@@ -44,7 +45,8 @@ class OrderInput extends React.Component{
         order.orderedAt = order && order.orderedAt ? order.orderedAt : new Date();
         return [
             {
-                name: 'customerID', 
+                name: 'customerID',
+                type: fieldTypes.CUSTOMER_FIELD,
                 label: 'Клиент', 
                 placeholder: 'Избери клиент',
                 value: order ? order.customerID : null,
@@ -52,6 +54,7 @@ class OrderInput extends React.Component{
             },
             {
                 name: 'products', 
+                type: fieldTypes.PRODUCT_FIELD,
                 label: 'Продукти', 
                 placeholder: 'Добави продукт',
                 value: order ? order.orderProducts : null,
@@ -65,6 +68,7 @@ class OrderInput extends React.Component{
             },
             {
                 name: 'orderedAt',
+                type: fieldTypes.DATE_FIELD,
                 label: 'Поръчано на',
                 placeholder: 'Въведи дата на поръчване',
                 value: order.orderedAt,

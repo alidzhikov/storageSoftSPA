@@ -1,6 +1,7 @@
 import React from 'react';
 import Stock from '../../models/stock';
 import Input from '../common/Input';
+import fieldTypes from '../../constants/fieldTypes';
 
 export default class OrderInput extends React.Component{
     constructor(props){
@@ -12,7 +13,8 @@ export default class OrderInput extends React.Component{
             type: 'stock',
             formFields: [
                 {
-                    name: 'product', 
+                    name: 'products',
+                    type: fieldTypes.PRODUCT_FIELD,
                     label: 'Продукт', 
                     placeholder: 'Избери продукт',
                     onChange: this.onProductSelect.bind(this)

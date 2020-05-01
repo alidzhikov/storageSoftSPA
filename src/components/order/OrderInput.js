@@ -10,52 +10,54 @@ import fieldTypes from '../../constants/fieldTypes';
 
 const mapStateToProps = state => ({
     customerState: state.customer,
-    orderState: state.order
+    orderState: state.order,
+    defaultStockroom: state.stock.stockrooms.find(stockroom => stockroom.isDefault)
 });
 
 const mapDispatchToProps = dispatch => ({
     onCustomerChange: id => {
         const payload = agent.Customer.getId(id);
-        dispatch({type:  CUSTOMER_PRICES_UPDATE, payload});
+        dispatch({ type: CUSTOMER_PRICES_UPDATE, payload });
         return payload;
     }
-  });
-class OrderInput extends React.Component{
-    constructor(props){
+});
+class OrderInput extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             orderID: props.match.params['orderID'],
             isEdit: props.match.url.indexOf('editOrder') > -1,
-            order:  new Order({}),
+            order: new Order({}),
             customerState: props.customerState,
             orderState: props.orderState,
-            type: 'order'
+            type: 'order',
+            defaultStockroom: props.defaultStockroom
         }
         this.onCustomerSelect = this.onCustomerSelect.bind(this);
         this.isEditOrAdd = this.isEditOrAdd.bind(this);
         this.getFormFields = this.getFormFields.bind(this);
     }
-    
-    componentDidMount(){
+
+    componentDidMount() {
         this.isEditOrAdd();
     }
 
-    getFormFields(){
+    getFormFields() {
         const order = this.state.order;
         order.orderedAt = order && order.orderedAt ? order.orderedAt : new Date();
         return [
             {
                 name: 'customerID',
                 type: fieldTypes.CUSTOMER_FIELD,
-                label: 'Клиент', 
+                label: 'Клиент',
                 placeholder: 'Избери клиент',
                 value: order ? order.customerID : null,
                 onChange: this.onCustomerSelect.bind(this)
             },
             {
-                name: 'products', 
+                name: 'products',
                 type: fieldTypes.PRODUCT_FIELD,
-                label: 'Продукти', 
+                label: 'Продукти',
                 placeholder: 'Добави продукт',
                 value: order ? order.orderProducts : null,
                 onChange: this.onProductAddOrUpdate.bind(this)
@@ -79,36 +81,37 @@ class OrderInput extends React.Component{
 
     isEditOrAdd() {
         const id = this.state.orderID;
-        if(!id) return;
+        if (!id) return;
         this.setState(state => {
-            state.order = 
+            state.order =
                 state.orderState && state.orderState.orders ?
-                    state.orderState.orders.find(el => el._id === id) : 
+                    state.orderState.orders.find(el => el._id === id) :
                     state.order;
             state.order.customer = state.customerState ? state.customerState.customers.find(el => el._id === state.order.customerID) : null;
             return state;
         });
-
     }
 
-    onProductAddOrUpdate(product, update = false){      
-        if(!product){
+    onProductAddOrUpdate(product, update = false) {
+        if (!product) {
             this.setState(state => state);
             return;
-        }  
-        const orderProduct = product instanceof OrderProduct ? product : new OrderProduct({product: product, price: product.basePrice, qty: 1});
+        }
+        const orderProduct = product instanceof OrderProduct ?
+            product : 
+            new OrderProduct({ product: product, price: product.basePrice, qty: 1, stockroom: this.state.defaultStockroom });
         this.setState(state => {
             const productIndex = state.order.orderProducts.findIndex(oPr => oPr.product._id === orderProduct.product._id);
-            if(productIndex > -1){
-                if(update){
+            if (productIndex > -1) {
+                if (update) {
                     state.order.orderProducts[productIndex] = orderProduct;
-                }else{
+                } else {
                     state.order.orderProducts[productIndex].qty = Number(state.order.orderProducts[productIndex].qty) + 1;
                 }
-            }else{
+            } else {
                 state.order.orderProducts.push(orderProduct);
             }
-            if(!update)
+            if (!update)
                 this.onProductPriceChange(state.order.orderProducts, state.order.customer)
             return state;
         });
@@ -121,12 +124,12 @@ class OrderInput extends React.Component{
             const customerPrice = prices.find(price => orderProduct.product._id === price.productId);
             if (customerPrice && orderProduct.product.price !== customerPrice.price) {
                 orderProduct.price = customerPrice.price;
-            }    
+            }
             return orderProduct;
         });
     }
 
-    onProductDelete(productID){
+    onProductDelete(productID) {
         this.setState(state => {
             state.order.orderProducts = state.order.orderProducts.filter(opr => opr.product._id !== productID);
             return state;
@@ -138,10 +141,10 @@ class OrderInput extends React.Component{
         const stateCustomer = this.props.customerState.customers.find(c => c._id === customer._id);
         if (!stateCustomer.prices || stateCustomer.prices.length === 0) {
             this.props.onCustomerChange(stateCustomer._id)
-                .then(res => 
+                .then(res =>
                     this.setState(state => {
                         const customer = res.data.customer;
-                        if(!customer) return state;                        
+                        if (!customer) return state;
                         state.order.customer = customer;
                         state.order.customerID = customer._id;
                         state.order.orderProducts = this.onProductPriceChange(state.order.orderProducts, state.order.customer);
@@ -165,7 +168,7 @@ class OrderInput extends React.Component{
         });
     }
 
-    render(){
+    render() {
         const orderID = this.state.orderID;
         const isEdit = this.state.isEdit;
         const order = this.state.order;
@@ -176,17 +179,17 @@ class OrderInput extends React.Component{
         const onProductDelete = this.onProductDelete.bind(this);
         return (
             <div>
-                <Input 
-                    type={type} 
-                    element={order} 
-                    formFields={formFields} 
-                    paramID={orderID} 
+                <Input
+                    type={type}
+                    element={order}
+                    formFields={formFields}
+                    paramID={orderID}
                     isEdit={isEdit}
-                    label={ (!isEdit ? 'Създай' : 'Редактирай') + ' поръчка'} />
-                <OrderContent 
-                    order={order} 
-                    onChange={onProductAdd} 
-                    onProductUpdate={onProductUpdate} 
+                    label={(!isEdit ? 'Създай' : 'Редактирай') + ' поръчка'} />
+                <OrderContent
+                    order={order}
+                    onChange={onProductAdd}
+                    onProductUpdate={onProductUpdate}
                     onProductDelete={onProductDelete} />
             </div>
         );

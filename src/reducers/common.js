@@ -73,7 +73,7 @@ import {
         return { ...state, redirectTo: action.error ? null : '/orders'}
       case STOCK_ADD:
       case STOCK_EDIT:
-        return { ...state, redirectTo: action.error ? null : '/stockroom'}
+        return { ...state, redirectTo: action.error ? null : '/stock'}
       default:
         return state;
     }

@@ -3,7 +3,9 @@ import {
   ASYNC_START,
   ASYNC_END,
   LOGIN,
-  LOGOUT
+  LOGOUT,
+  STOCKROOM_ADD,
+  STOCKROOM_EDIT
 } from './constants/actionTypes';
 
 const promiseMiddleware = store => next => action => {
@@ -60,9 +62,22 @@ const localStorageMiddleware = store => next => action => {
   next(action);
 };
 
+const effects = store => next => action => {
+  switch (action.type) {
+    case STOCKROOM_ADD:
+    case STOCKROOM_EDIT:
+      if (action.payload && action.payload.stockroom && action.payload.stockroom.oldDefaultStockroom) {
+        store.dispatch({ type: STOCKROOM_EDIT, payload: { stockroom: action.payload.stockroom.oldDefaultStockroom } });
+      }
+      next(action);
+      break;
+    default:
+      next(action);
+  }
+};
+
 function isPromise(v) {
   return v && typeof v.then === 'function';
 }
 
-
-export { promiseMiddleware, localStorageMiddleware }
+export { promiseMiddleware, localStorageMiddleware, effects }

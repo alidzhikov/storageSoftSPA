@@ -3,7 +3,11 @@ import {
   STOCK_PAGE_OUT_LOADED,
   STOCK_ADD,
   STOCK_EDIT,
-  STOCK_REMOVE
+  STOCK_REMOVE,
+  STOCKROOM_PAGE_LOADED,
+  STOCKROOM_ADD,
+  STOCKROOM_EDIT,
+  STOCKROOM_REMOVE
 } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
@@ -41,6 +45,37 @@ export default (state = {}, action) => {
         return {
           ...state,
           stocks: [...state.stocks.slice(0,  indexToDel), ...state.stocks.slice(indexToDel + 1)]
+        }
+      case STOCKROOM_PAGE_LOADED:
+        return {
+          ...state,
+          redirectTo: '/stocks',
+          stockrooms: action.payload.stockrooms,
+        };
+      // case STOCKROOM_PAGE_UNLOADED:
+      //   return {};
+      case STOCKROOM_ADD:
+        state.stockrooms = state.stockrooms ? state.stockrooms : [];
+        const stockroomToAdd = action.payload.stockroom && action.payload.stockroom.stockroom ? action.payload.stockroom.stockroom : action.payload.stockroom;
+        return {
+          ...state,
+          redirectTo: '/stocks',
+          stockrooms: [ ...state.stockrooms, stockroomToAdd]
+        }
+      case STOCKROOM_EDIT: 
+        state.stockrooms = state.stockrooms ? state.stockrooms : [];
+        const stockroomIndexToEdit = state.stockrooms.findIndex(stockroom => stockroom._id === action.payload.stockroom._id);
+        const stockroomToUpdate = action.payload.stockroom && action.payload.stockroom.stockroom ? action.payload.stockroom.stockroom : action.payload.stockroom;
+        return {
+          ...state,
+          redirectTo: '/stocks?edit=success',
+          stockrooms: [...state.stockrooms.slice(0, stockroomIndexToEdit), stockroomToUpdate, ...state.stockrooms.slice(stockroomIndexToEdit + 1)]
+        }
+      case STOCKROOM_REMOVE:
+        const stockroomIndexToDel = state.stockrooms.findIndex(stockroom => stockroom._id === action.payload.stockroomID);
+        return {
+          ...state,
+          stockrooms: [...state.stockrooms.slice(0,  stockroomIndexToDel), ...state.stockrooms.slice(stockroomIndexToDel + 1)]
         }
       default:
         return state; 

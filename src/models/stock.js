@@ -2,6 +2,7 @@ export default class Stock {
     product;
     amount;
     sold;
+    stockroom;
     creator;
     createdAt;
     updatedAt;
@@ -12,6 +13,7 @@ export default class Stock {
         product = '',
         amount = 0,
         sold = 0,
+        stockroom = null,
         createdAt = null,
         updatedAt = null,
         creator = null,
@@ -21,6 +23,7 @@ export default class Stock {
         this.product = product;
         this.amount = amount;
         this.sold = sold;
+        this.stockroom = stockroom;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.creator = creator;

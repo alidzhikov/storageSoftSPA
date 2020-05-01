@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
-import { promiseMiddleware, localStorageMiddleware } from './middleware';
+import { promiseMiddleware, localStorageMiddleware, effects } from './middleware';
 import reducer from './reducer';
 
 const getMiddleware = () => {
@@ -10,7 +10,7 @@ const getMiddleware = () => {
     return applyMiddleware(promiseMiddleware, localStorageMiddleware);
   } else {
     // Enable additional logging in non-production environments.
-    return applyMiddleware(promiseMiddleware, localStorageMiddleware, createLogger())
+    return applyMiddleware(promiseMiddleware, localStorageMiddleware, effects, createLogger())
   }
 }
 

@@ -2,7 +2,8 @@ import React from 'react';
 import OrderPreview from '../order/OrderPreview';
 import CustomerPreview from '../customer/CustomerPreview';
 import ProductPreview from '../product/ProductPreview';
-import StockPreview from '../stockroom/StockPreview';
+import StockPreview from '../stock/StockPreview';
+import StockroomPreview from '../stockroom/StockroomPreview';
 import { Link } from "react-router-dom";
 
 const List = props => {
@@ -16,25 +17,23 @@ const List = props => {
     return (
       <div className="element-preview">
         No items are here... yet.
-        <AddButton type={props.type}/>
+        <AddButton type={props.type} />
       </div>
     );
   }
 
   return (
     <div>
-      <br/>
-      <AddButton type={props.type}/>
-      <table className="table">
+      <br />
+      <AddButton type={props.type} />
+      <table className="table table-sm">
         <thead>
-         
-            <Head type={props.type}/>
-         
+          <Head type={props.type} />
         </thead>
         <tbody>
-        {
-          props.elements.map((element) => <Item type={props.type} element={element} key={element._id} /> )
-        }
+          {
+            props.elements.map((element) => <Item type={props.type} element={element} key={element._id} />)
+          }
         </tbody>
       </table>
     </div>
@@ -43,8 +42,8 @@ const List = props => {
 
 export default List;
 
-function Head(props){
-  switch(props.type){
+function Head(props) {
+  switch (props.type) {
     case 'product':
       return (
         <tr>
@@ -67,24 +66,36 @@ function Head(props){
         </tr>
       );
     case 'order':
-        return (
-          <tr>
-            <th>Клиент</th>
-            <th>Дата на създаване</th>
-            <th>Брой</th>
-            <th>Сума</th>
-            <th>Сума с ДДС</th>
-            <th>Неизплатено</th>
-            <th></th>
-            <th></th>
-          </tr>
-        );
-    case 'stockroom':
+      return (
+        <tr>
+          <th>Клиент</th>
+          <th>Дата на създаване</th>
+          <th>Брой</th>
+          <th>Сума</th>
+          <th>Сума с ДДС</th>
+          <th>Неизплатено</th>
+          <th></th>
+          <th></th>
+        </tr>
+      );
+    case 'stock':
       return (
         <tr>
           <th>Продукт</th>
           <th>Добавено количество</th>
+          <th>Склад</th>
           <th>Дата на зареждане</th>
+          <th></th>
+          <th></th>
+        </tr>
+      );
+    case 'stockroom':
+      return (
+        <tr>
+          <th>Име</th>
+          <th>Описание</th>
+          <th>Адрес</th>
+          <th>Основен</th>
           <th></th>
           <th></th>
         </tr>
@@ -94,31 +105,35 @@ function Head(props){
   }
 }
 
-function AddButton(props){
-  switch(props.type){
+function AddButton(props) {
+  switch (props.type) {
     case 'product':
-      return <Link to="/addProduct"><button className="btn btn-primary">Създай продукт</button></Link>
+      return <Link to="/addProduct"><button className="btn btn-primary">Създай продукт</button></Link>;
     case 'customer':
-      return <Link to="/addCustomer"><button className="btn btn-primary">Създай клиент</button></Link>
+      return <Link to="/addCustomer"><button className="btn btn-primary">Създай клиент</button></Link>;
     case 'order':
-        return <Link to="/addOrder"><button className="btn btn-primary">Създай поръчка</button></Link>
+      return <Link to="/addOrder"><button className="btn btn-primary">Създай поръчка</button></Link>;
+    case 'stock':
+      return <Link to="/addStock"><button className="btn btn-primary">Добави елемент</button></Link>;
     case 'stockroom':
-        return <Link to="/addStock"><button className="btn btn-primary">Добави елемент</button></Link>
+      return <Link to="/addStockroom"><button className="btn btn-primary">Добави склад</button></Link>;
     default:
       return null;
   }
 }
 
-function Item(props){
-  switch(props.type){
+function Item(props) {
+  switch (props.type) {
     case 'product':
       return <ProductPreview product={props.element} key={props.element._id} />;
     case 'customer':
-      return <CustomerPreview customer={props.element} key={props.element._id} />
+      return <CustomerPreview customer={props.element} key={props.element._id} />;
     case 'order':
-        return <OrderPreview order={props.element} key={props.element._id} />
+      return <OrderPreview order={props.element} key={props.element._id} />;
+    case 'stock':
+      return <StockPreview stock={props.element} key={props.element._id} />;
     case 'stockroom':
-        return <StockPreview stock={props.element} key={props.element._id} />
+      return <StockroomPreview stockroom={props.element} key={props.element._id} />;
     default:
   }
 }

@@ -1,16 +1,17 @@
 import React from 'react';
 import Input from '../common/Input';
 import Util from './util';
-export default class OrderProductPreview extends React.Component{
-  constructor(props){
+import fieldTypes from '../../constants/fieldTypes';
+export default class OrderProductPreview extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-        orderProduct: props.orderProduct,
-        isEditingInOrderMode: props.isEditingInOrderMode,
-        editable: props.editable,
-        onChange: props.onChange,
-        onDelete: props.onDelete,
-        onUpdate: props.onUpdate
+      orderProduct: props.orderProduct,
+      isEditingInOrderMode: props.isEditingInOrderMode,
+      editable: props.editable,
+      onChange: props.onChange,
+      onDelete: props.onDelete,
+      onUpdate: props.onUpdate
     };
     this.onSaveOrderProduct = this.onSaveOrderProduct.bind(this);
     this.onSwitchEditOrderProduct = this.onSwitchEditOrderProduct.bind(this);
@@ -18,27 +19,27 @@ export default class OrderProductPreview extends React.Component{
     this.onCancelEditOrderProduct = this.onCancelEditOrderProduct.bind(this);
   }
 
-  onSwitchEditOrderProduct(){
+  onSwitchEditOrderProduct() {
     this.setState(state => state.isEditingInOrderMode = true);
   }
 
-  onSaveOrderProduct(orderProduct){
+  onSaveOrderProduct(orderProduct) {
     this.setState(state => {
       state.isEditingInOrderMode = false;
       return state;
     });
-    if(this.state.onChange){
+    if (this.state.onChange) {
       this.state.onChange(orderProduct, true);
     }
   }
 
-  onDeleteOrderProduct(){
-    if(this.state.onDelete){
+  onDeleteOrderProduct() {
+    if (this.state.onDelete) {
       this.state.onDelete(this.state.orderProduct.product._id);
     }
   }
 
-  onCancelEditOrderProduct(){
+  onCancelEditOrderProduct() {
     this.setState(state => state.isEditingInOrderMode = false);
   }
 
@@ -50,6 +51,10 @@ export default class OrderProductPreview extends React.Component{
     }
   }
 
+  onStocroomSelect(stockroom) {
+    this.setState(state => { state.orderProduct.stockroom = stockroom; });
+  }
+
   render() {
     const orderProduct = this.state.orderProduct;
     const isClientPrice = this.isClientPrice(orderProduct);
@@ -57,47 +62,55 @@ export default class OrderProductPreview extends React.Component{
     const onSaveOrderProduct = this.onSaveOrderProduct;
     const onDeleteOrderProduct = this.onDeleteOrderProduct;
     const buttons = !this.state.editable || this.state.isEditingInOrderMode ? null :
-      ( 
+      (
         <span>
           <button className="btn btn-primary" onClick={onSwitchEditOrderProduct}>Редактирай</button>
           <button className="btn btn-danger" onClick={onDeleteOrderProduct}>Изтрий</button>
         </span>
       );
-    
+
     const formFields = [
       {
-          name: 'qty', 
-          label: 'Брой', 
-          placeholder: 'Брой продукти',
+        name: 'qty',
+        label: 'Брой',
+        placeholder: 'Брой продукти',
       },
       {
-          name: 'price', 
-          label: 'Цена', 
-          placeholder: 'Цена на продукт',
+        name: 'price',
+        label: 'Цена',
+        placeholder: 'Цена на продукт',
+      },
+      {
+        name: 'stockroom',
+        type: fieldTypes.STOCKROOM_FIELD,
+        label: 'Склад', 
+        placeholder: '',
+        onChange: this.onStocroomSelect.bind(this)
       }
     ];
 
-    if(this.state.isEditingInOrderMode){
+    if (this.state.isEditingInOrderMode) {
       const onCancelEditOrderProduct = this.onCancelEditOrderProduct;
       return (
-        <Input 
+        <Input
           type="orderProduct"
-          element={orderProduct} 
-          formFields={formFields} 
+          element={orderProduct}
+          formFields={formFields}
           onSubmitNoDb={onSaveOrderProduct}
           onCancel={onCancelEditOrderProduct} />
       );
-    }else{
+    } else {
       return (
         <tr className="product-preview" key={orderProduct.product._id}>
-          <td>{orderProduct.product.name} </td>
-          <td>{orderProduct.product.size} </td>
-          <td>{orderProduct.qty} </td>
+          <td>{orderProduct.product.name}</td>
+          <td>{orderProduct.product.size}</td>
+          <td>{orderProduct.qty}</td>
+          <td>{orderProduct.stockroom.name}</td>
           <td>
-            {Util.roundToTwoString(orderProduct.price)} 
+            {Util.roundToTwoString(orderProduct.price)}
             {isClientPrice}
           </td>
-          <td>{Util.roundToTwoString(orderProduct.price*orderProduct.qty)} </td>
+          <td>{Util.roundToTwoString(orderProduct.price * orderProduct.qty)} </td>
           <td>{buttons}</td>
         </tr>
       );

@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import List from '../common/List';
 import {STOCK_PAGE_IN_LOADED, STOCK_PAGE_OUT_LOADED, STOCK_PAGE_UNLOADED} from '../../constants/actionTypes';
 import agent from '../../agent';
-import StockView from './StockView';
+import StockroomView from './StockroomView';
 
 const mapStateToProps = state => ({
-  ...state.stock,
+  ...state.stockroom,
   appName: state.common.appName,
   token: state.common.token
 });
@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 class Stockroom extends React.Component {
 
   componentWillMount() {
-    this.props.onLoad(agent.Stock.getAll(), agent.Stock.getProductsOrdered());    
+    this.props.onLoad(agent.Stockroom.getAll(), agent.Stockroom.getProductsOrdered());    
   }
   
   componentWillUnmount() {
@@ -32,8 +32,8 @@ class Stockroom extends React.Component {
 
   render() {
     return <div>
-        <StockView stocks={this.props.stocks} orderedStocks={this.props.orderedStocks}/>
-        <List elements={this.props.stocks} type="stockroom"/>
+        <StockroomView stockrooms={this.props.stockrooms} orderedStockrooms={this.props.orderedStockrooms}/>
+        <List elements={this.props.stockrooms} type="stockroom"/>
       </div>
   }
 }

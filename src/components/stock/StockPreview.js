@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { STOCK_REMOVE } from '../../constants/actionTypes';
@@ -27,6 +27,7 @@ const StockPreview = props => {
     <tr className="order-preview" key={stock._id}>
       <td>{stock.product.name}</td>
       <td>{stock.amount} бр.</td>
+      <td>{stock.stockroom ? stock.stockroom.name : 'Няма'}</td>
       <td>{formatDate(stock.createdAt)}</td>
       <td><Link to={stockEditURL}><button className="btn btn-primary">Редактирай</button></Link></td>
       <td><button className="btn btn-danger" onClick={onDeleteEv}>Изтрий</button></td>

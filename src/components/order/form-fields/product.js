@@ -19,13 +19,8 @@ export default class ProductFormField extends React.Component{
         this.onProductAdd = this.onProductAdd.bind(this);
     }
 
-    onProductAdd(value, state, props){
- //       console.log(value);
-        // this.setState(state => {
-        //     state.value.push(state.products.find(product => product._id === value.value));
-        // });
+    onProductAdd(value) {
         this.props.onChange(this.state.products.find(product => product._id === value.value))
-   //     console.log(this.state.value);
     }
 
     render(){

@@ -2,8 +2,8 @@ import React from 'react';
 import OrderProductPreview from './OrderProductPreview';
 import Util from './util';
 import { formatDate } from '../common/util';
-class OrderContent extends React.Component{
-    constructor(props){
+class OrderContent extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             // only when editable
@@ -14,17 +14,17 @@ class OrderContent extends React.Component{
     }
 
     orderTableHeaders() {
-        return this.isEditable() ? 
+        return this.isEditable() ?
             (
                 <tr>
                     <th scope="col">Клиент</th>
                 </tr>
-            ) : 
+            ) :
             (
                 <tr>
                     <th scope="col">Клиент</th>
-                    <th  scope="col">Поръчано на</th>
-                    <th  scope="col">Създадено на</th>
+                    <th scope="col">Поръчано на</th>
+                    <th scope="col">Създадено на</th>
                 </tr>
             );
     }
@@ -83,6 +83,7 @@ class OrderContent extends React.Component{
                         <th scope="col">Продукт</th>
                         <th scope="col">Размер</th>
                         <th scope="col">Брой</th>
+                        <th scope="col">Склад</th>
                         <th scope="col">Цена 1</th>
                         <th scope="col">Цена</th>
                         <th scope="col"></th>
@@ -95,10 +96,12 @@ class OrderContent extends React.Component{
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td>{totalSumString}</td>
                         <td></td>
                     </tr>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

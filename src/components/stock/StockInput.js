@@ -23,25 +23,39 @@ export default class OrderInput extends React.Component{
                     name: 'amount', 
                     label: 'Количество', 
                     placeholder: ''
+                },
+                {
+                    name: 'stockroom',
+                    type: fieldTypes.STOCKROOM_FIELD,
+                    label: 'Склад', 
+                    placeholder: '',
+                    onChange: this.onStocroomSelect.bind(this)
                 }
             ],
         }
     }
 
-    onProductSelect(product){
+    onProductSelect(product) {
         this.setState(state => {
-            //state.stock.product = product;
             state.stock.product = product._id;
             return state;
         });
     }
 
-    render(){
+    onStocroomSelect(stockroom) {
+        this.setState(state => {
+            state.stock.stockroom = stockroom._id;
+            return state;
+        });
+    }
+
+
+    render() {
+        const formFields = this.state.formFields;
         const stockID = this.state.stockID;
         const isEdit = this.state.isEdit;
         const stock = this.state.stock;
         const type = this.state.type;
-        const formFields = this.state.formFields;
         return (
             <div>
                 <Input 
@@ -50,7 +64,7 @@ export default class OrderInput extends React.Component{
                     formFields={formFields} 
                     paramID={stockID} 
                     isEdit={isEdit}
-                    label={ (!isEdit ? 'Регистрирай' : 'Редактирай') + ' складова наличност'} />
+                    label={(!isEdit ? 'Регистрирай' : 'Редактирай') + ' складова наличност'} />
             </div>
         );
     }
